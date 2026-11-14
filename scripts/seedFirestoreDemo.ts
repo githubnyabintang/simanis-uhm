@@ -2,7 +2,7 @@ import { config } from 'dotenv';
 import { initializeApp, deleteApp } from 'firebase/app';
 import { collection, doc, getDocsFromServer, getFirestore, writeBatch } from 'firebase/firestore';
 
-config({ path: '.env.local' });
+config({ path: ['.env.local', '.env'], quiet: true });
 const projectId = process.env.VITE_FIREBASE_PROJECT_ID;
 const apiKey = process.env.VITE_FIREBASE_API_KEY;
 const appId = process.env.VITE_FIREBASE_APP_ID;

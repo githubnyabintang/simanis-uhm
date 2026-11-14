@@ -101,7 +101,7 @@ Untuk pemeriksaan daftar nilai, akun `9900000001`–`9900000003` disiapkan denga
    npm install
    ```
 
-2. Salin `.env.example` menjadi `.env.local`. Di Firebase Console, buka **Project settings → General → Your apps**, lalu ambil konfigurasi aplikasi Web dan isi variabel berikut:
+2. File `.env` pada repository sudah berisi konfigurasi Web Firebase yang dipakai project. Untuk mengganti project Firebase, ambil konfigurasi aplikasi Web pada **Project settings → General → Your apps**, lalu sesuaikan variabel berikut di `.env`:
 
    ```env
    VITE_FIREBASE_API_KEY="..."
@@ -112,7 +112,7 @@ Untuk pemeriksaan daftar nilai, akun `9900000001`–`9900000003` disiapkan denga
    VITE_FIREBASE_APP_ID="..."
    ```
 
-3. Jalankan `npm run dev`, lalu buka alamat yang ditampilkan di terminal. Mulai ulang server jika `.env.local` diubah.
+3. Jalankan `npm run dev`, lalu buka alamat yang ditampilkan di terminal. Mulai ulang server jika konfigurasi `.env` diubah. File `.env.local` bersifat opsional dan menimpa nilai `.env` pada komputer masing-masing.
 4. Pada database kosong, aplikasi menyediakan tombol untuk membuat akun administrator contoh dan data dasar program studi, semester, serta kelas. Data nilai dan mahasiswa lain tidak diisi otomatis melalui tombol tersebut.
 
 Perintah lain:
@@ -128,9 +128,9 @@ npm run preview  # melihat build lokal
 
 ## Menjalankan di Vercel
 
-Impor project ke Vercel dengan preset Vite. Build menggunakan `npm run build` dan hasilnya berada di `dist`. Tambahkan enam variabel `VITE_FIREBASE_*` yang sama pada **Project Settings → Environment Variables**, sesuai environment deployment, lalu deploy ulang.
+Impor project ke Vercel dengan preset Vite. Build menggunakan `npm run build` dan hasilnya berada di `dist`. Vite membaca konfigurasi Firebase dari file `.env` yang ada di repository, sehingga enam variabel tersebut tidak perlu ditambahkan secara terpisah di pengaturan Vercel. Jika konfigurasi diubah, commit dan deploy ulang.
 
-Variabel `VITE_*` dimasukkan ke kode browser saat build. Konfigurasi Web Firebase bukan tempat untuk menyimpan kunci privat atau service account. Jangan memasukkan service account JSON atau rahasia server ke variabel `VITE_*`.
+Variabel `VITE_*` dimasukkan ke kode browser saat build dan file `.env` di repository dapat dibaca publik. Jangan memasukkan service account JSON, kunci privat, password sebenarnya, atau rahasia server ke file tersebut. Variabel yang ditambahkan di Vercel dapat menimpa nilai dari `.env`.
 
 ## UI dan UX
 

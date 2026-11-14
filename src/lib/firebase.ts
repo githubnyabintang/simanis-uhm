@@ -29,7 +29,7 @@ const requiredConfig: Array<keyof FirebaseWebConfig> = [
 export const firebaseConfigured = requiredConfig.every((key) => Boolean(firebaseConfig[key]));
 
 if (!firebaseConfigured && import.meta.env.PROD) {
-  console.warn('Firebase belum dikonfigurasi. Isi environment variables VITE_FIREBASE_* di Vercel.');
+  console.warn('Firebase belum dikonfigurasi. Periksa nilai VITE_FIREBASE_* di file .env.');
 }
 
 const sdkConfig: FirebaseOptions = firebaseConfig;

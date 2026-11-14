@@ -3,7 +3,7 @@ import { initializeApp, deleteApp } from 'firebase/app';
 import { deleteDoc, doc, getFirestore, onSnapshot, setDoc, updateDoc } from 'firebase/firestore';
 import { randomUUID } from 'node:crypto';
 
-config({ path: '.env.local', quiet: true });
+config({ path: ['.env.local', '.env'], quiet: true });
 if (process.env.VITE_FIREBASE_PROJECT_ID !== 'simanis-uhm' || !process.env.VITE_FIREBASE_API_KEY || !process.env.VITE_FIREBASE_APP_ID) throw Error('Konfigurasi Firebase belum lengkap.');
 const app = initializeApp({ apiKey: process.env.VITE_FIREBASE_API_KEY, projectId: process.env.VITE_FIREBASE_PROJECT_ID, appId: process.env.VITE_FIREBASE_APP_ID });
 const ref = doc(getFirestore(app), '_realtime_checks', randomUUID());

@@ -4,7 +4,7 @@ import { collection, getDocsFromServer, getFirestore } from 'firebase/firestore'
 import { findLoginUser } from '../src/utils/findLoginUser';
 import type { User } from '../src/types';
 
-config({ path: '.env.local', quiet: true });
+config({ path: ['.env.local', '.env'], quiet: true });
 if (process.env.VITE_FIREBASE_PROJECT_ID !== 'simanis-uhm' || !process.env.VITE_FIREBASE_API_KEY || !process.env.VITE_FIREBASE_APP_ID) throw Error('Konfigurasi Firebase belum lengkap.');
 const app = initializeApp({ apiKey: process.env.VITE_FIREBASE_API_KEY, projectId: process.env.VITE_FIREBASE_PROJECT_ID, appId: process.env.VITE_FIREBASE_APP_ID });
 const db = getFirestore(app);

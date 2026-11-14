@@ -9,10 +9,10 @@ is not used. Collection fields are listed in `firestore.schema.md`.
 
 ## Local development
 
-1. Copy `.env.example` to `.env.local`.
-2. In Firebase Console, open **Project settings > General > Your apps** and copy
-   the Web app config values into the matching `VITE_FIREBASE_*` variables.
-3. Run `npm install` and `npm run dev`.
+1. The tracked `.env` contains the project's Firebase Web configuration.
+2. Run `npm install` and `npm run dev`. If a different local project is needed,
+   copy `.env.example` to `.env.local` and supply that project's Web config;
+   `.env.local` takes precedence over `.env`.
 
 Firebase Web app config is used by browser code. Never place a service account
 JSON, private key, or Admin SDK credential in a `VITE_*` variable or frontend
@@ -20,10 +20,10 @@ source code.
 
 ## Vercel
 
-Add the same six `VITE_FIREBASE_*` variables under Vercel **Settings >
-Environment Variables** for the environments that will use the app, then
-redeploy. Do not commit `.env.local`. These variables configure the client but
-do not grant database access; Firestore Security Rules control that access.
+Vercel's Vite build reads the tracked `.env`, so separate Firebase environment
+variables are not required. Variables configured in Vercel override `.env`.
+The Web configuration is public and does not grant database access by itself;
+Firestore Security Rules control that access. Do not commit `.env.local`.
 
 ## Firestore access
 
