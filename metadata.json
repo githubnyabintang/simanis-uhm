@@ -1,0 +1,6 @@
+{
+  "name": "SIMANIS UHM",
+  "description": "Sistem Informasi Manajemen Nilai Mahasiswa Universitas Handayani Makassar",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

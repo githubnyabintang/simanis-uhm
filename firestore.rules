@@ -1,0 +1,11 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Secure default: deny every client request until trusted role claims,
+    // collection schema, and role-specific access rules are implemented.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

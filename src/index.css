@@ -1,0 +1,113 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: radial-gradient(circle at 10% 15%, #cce9fc 0%, #ebf6fe 30%, #d8effc 65%, #c1e4fb 100%) fixed;
+    color: #1F2937;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 12px 36px -8px rgba(4, 90, 140, 0.07);
+}
+
+.glass-pill {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 6px 20px -3px rgba(4, 90, 140, 0.05);
+}
+
+@keyframes surface-appear {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes glow-drift {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to { transform: translate3d(-18px, 16px, 0) scale(1.06); }
+}
+
+.login-card-enter { animation: surface-appear 550ms cubic-bezier(.22, 1, .36, 1) both; }
+.app-page-enter { animation: surface-appear 380ms cubic-bezier(.22, 1, .36, 1); }
+.login-glow { animation: glow-drift 10s ease-in-out infinite alternate; }
+.login-glow-two { animation-delay: -5s; animation-direction: alternate-reverse; }
+.motion-card { transition: transform 240ms cubic-bezier(.22, 1, .36, 1), box-shadow 240ms ease, border-color 240ms ease; }
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .motion-card:hover { transform: translateY(-4px); box-shadow: 0 18px 38px -16px rgba(4, 90, 140, .2); border-color: rgba(125, 190, 225, .65); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .login-card-enter, .app-page-enter, .login-glow { animation: none; }
+  .motion-card { transition: none; }
+}
+
+.khs-report { color: #000; background: #fff; font: 9pt/1.3 Arial, Helvetica, sans-serif; }
+.khs-letterhead { display: grid; grid-template-columns: 25mm 1fr 25mm; align-items: center; min-height: 28mm; padding-bottom: 2mm; border-bottom: 4px double #000; }
+.khs-logo { width: 23mm; height: 25mm; object-fit: contain; justify-self: center; }
+.khs-letterhead-text { text-align: center; font-size: 7.5pt; line-height: 1.15; }
+.khs-foundation, .khs-university { font-family: 'Times New Roman', Times, serif; font-weight: 700; }
+.khs-foundation { font-size: 12pt; }
+.khs-university { font-size: 17pt; line-height: 1.05; }
+.khs-accreditation { font-size: 10pt; }
+.khs-contact-gap { display: inline-block; margin-left: 7mm; }
+.khs-title { margin: 8mm 0 5mm; text-align: center; font-size: 16pt; line-height: 1.1; font-weight: 700; }
+.khs-identity { display: grid; grid-template-columns: 1fr 0.65fr; gap: 9mm; margin-bottom: 5mm; }
+.khs-identity dl { margin: 0; }
+.khs-identity dl > div { display: grid; grid-template-columns: 33mm 1fr; gap: 2mm; margin-bottom: 2mm; }
+.khs-identity dt, .khs-identity dd { margin: 0; }
+.khs-identity dd { font-weight: 700; overflow-wrap: anywhere; }
+.khs-table { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 8pt; }
+.khs-table th, .khs-table td { border: 1px solid #222; padding: 2mm 1.5mm; overflow-wrap: anywhere; vertical-align: middle; }
+.khs-table th { font-weight: 400; text-align: center; }
+.khs-table th:nth-child(1) { width: 7%; }
+.khs-table th:nth-child(2) { width: 16%; }
+.khs-table th:nth-child(3) { width: 36%; }
+.khs-table th:nth-child(4) { width: 32%; }
+.khs-table th:nth-child(5) { width: 9%; }
+.khs-center { text-align: center; }
+.khs-bottom { display: flex; justify-content: space-between; align-items: flex-start; gap: 12mm; margin-top: 5mm; break-inside: avoid; }
+.khs-summary { width: 72mm; border: 1px solid #222; }
+.khs-summary-title { padding: 4mm 2mm; text-align: center; font-weight: 700; border-bottom: 1px solid #222; }
+.khs-summary-value { padding: 4mm 2mm; text-align: center; font-size: 16pt; font-weight: 700; border-bottom: 1px solid #222; }
+.khs-summary p { margin: 0; padding: 2mm; font-size: 7.5pt; }
+.khs-signature { flex: 1; text-align: center; }
+.khs-signature p { margin: 1.5mm 0; }
+.khs-signature-space { height: 23mm; }
+.khs-signature-line { font-weight: 700; }
+
+@page { size: A4 portrait; margin: 12mm; }
+
+@media print {
+  .app-page-enter { animation: none !important; transform: none !important; }
+  body {
+    background: #FFFFFF !important;
+    color: #000000 !important;
+  }
+  main { max-width: none !important; padding: 0 !important; }
+  .khs-table thead { display: table-header-group; }
+  .khs-table tr { break-inside: avoid; }
+  .no-print {
+    display: none !important;
+  }
+  .print-only {
+    display: block !important;
+  }
+}
+
+@media screen {
+  .print-only {
+    display: none !important;
+  }
+}
