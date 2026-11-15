@@ -40,6 +40,7 @@ yang sama dengan field `id` agar referensi dari aplikasi tetap mudah dipetakan.
 | `weights` | `BobotNilai` | `id`, `penawaranId`, `bobotTugas`, `bobotUTS`, `bobotUAS`, `updatedAt` |
 | `grades` | `NilaiMahasiswa` | `id`, `pesertaId`, `penawaranId`, `npm`, `nilaiTugas`, `nilaiUTS`, `nilaiUAS`, `statusVerifikasi`, `updatedAt`, serta field revisi/verifikasi opsional |
 | `verificationHistory` | `RiwayatVerifikasi` | `id`, `nilaiId`, `penawaranId`, `npm`, `aksi`, `userId`, `userName`, `waktu`, `keterangan`, nilai sebelum/sesudah opsional |
+| `feedback` | `Feedback` | `id`, `nama`, `email`, `role` (`dosen`/`mahasiswa`/`pengunjung`), rating tampilan/navigasi/kenyamanan, `saran`, `createdAt`, serta `userId` opsional |
 
 `dosenId`, `userId`, `verifiedBy`, `dimintaOleh`, dan `diputuskanOleh` adalah
 referensi ke field `id` dalam collection `users`.

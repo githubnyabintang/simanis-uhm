@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
 import { PenawaranMataKuliah } from '../../types';
 import { Calendar, Plus, Trash2, CheckCircle2, AlertCircle, ArrowRight } from 'lucide-react';
+import { PaginationControls, paginate } from '../common/PaginationControls';
 
 export const PenawaranManagement: React.FC = () => {
   const {
@@ -26,6 +27,9 @@ export const PenawaranManagement: React.FC = () => {
   const [ruang, setRuang] = useState('Lab Komputer 1');
   const [jadwal, setJadwal] = useState('Senin, 08:00 - 10:30 WITA');
   const [actionNotice, setActionNotice] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const visibleOfferings = paginate(offerings, page, pageSize);
 
   const lecturers = users.filter((u) => u.role === 'dosen');
 
@@ -96,7 +100,7 @@ export const PenawaranManagement: React.FC = () => {
 
       {/* Grid of Offerings */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-        {offerings.map((off) => {
+        {visibleOfferings.map((off) => {
           const course = courses.find((c) => c.id === off.mataKuliahId);
           const lecturer = users.find((u) => u.id === off.dosenId);
           const kls = classes.find((k) => k.id === off.kelasId);
@@ -162,6 +166,7 @@ export const PenawaranManagement: React.FC = () => {
           );
         })}
       </div>
+      <PaginationControls page={page} pageSize={pageSize} totalItems={offerings.length} onPageChange={setPage} onPageSizeChange={(size) => { setPageSize(size); setPage(1); }} itemLabel="penawaran kelas" />
 
       {/* Modal Add Offering */}
       {modalOpen && (

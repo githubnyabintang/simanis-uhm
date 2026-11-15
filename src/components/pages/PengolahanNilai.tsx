@@ -7,7 +7,6 @@ import {
 } from '../../utils/gradeCalculation';
 import {
   Award,
-  Lock,
   Unlock,
   CheckCircle,
   AlertCircle,
@@ -19,12 +18,13 @@ import {
   FileText,
   UserCheck,
   History,
-  ShieldAlert,
   ChevronDown,
   ChevronUp,
   Info
 } from 'lucide-react';
 import { GradeRevisionQueue } from './GradeRevisionQueue';
+import { AdminWeightManagement } from './AdminWeightManagement';
+import { PaginationControls, paginate } from '../common/PaginationControls';
 
 export const PengolahanNilai: React.FC = () => {
   const {
@@ -74,6 +74,8 @@ export const PengolahanNilai: React.FC = () => {
 
   // State for mobile accordion card
   const [expandedStudentId, setExpandedStudentId] = useState<string | null>(null);
+  const [studentPage, setStudentPage] = useState(1);
+  const [studentPageSize, setStudentPageSize] = useState(10);
 
   // Modal for cancel verification
   const [cancelModalState, setCancelModalState] = useState<{ open: boolean; gradeId: string; studentName: string } | null>(null);
@@ -93,9 +95,9 @@ export const PengolahanNilai: React.FC = () => {
   // Participants & grades in this offering
   const classEnrollments = enrollments.filter((e) => e.penawaranId === activeOfferingId);
   const classGrades = grades.filter((g) => g.penawaranId === activeOfferingId);
+  const visibleEnrollments = paginate(classEnrollments, studentPage, studentPageSize);
 
-  // Check if any student in this offering has been verified
-  const hasVerifiedStudents = classGrades.some((g) => g.statusVerifikasi === 'Terverifikasi');
+  React.useEffect(() => { setStudentPage(1); setExpandedStudentId(null); }, [activeOfferingId]);
 
   // Total weight validation
   const weightVal = validateWeights(tugasWeight, utsWeight, uasWeight);
@@ -180,7 +182,7 @@ export const PengolahanNilai: React.FC = () => {
   };
 
   if (currentUser?.role === 'admin') {
-    return <div className="space-y-5"><header><h2 className="text-xl font-black text-slate-900">Persetujuan Revisi Nilai</h2><p className="mt-1 text-xs text-slate-500">Tinjau permintaan dosen. Administrator tidak dapat mengubah atau menetapkan nilai.</p></header><GradeRevisionQueue /></div>;
+    return <div className="space-y-5"><header><h2 className="text-xl font-black text-slate-900">Pengaturan Bobot & Persetujuan Revisi</h2><p className="mt-1 text-xs text-slate-500">Administrator dapat memperbarui bobot semua kelas, tanpa mengubah nilai komponen mahasiswa.</p></header><AdminWeightManagement /><GradeRevisionQueue /></div>;
   }
   if (currentUser?.role !== 'dosen') {
     return <div className="rounded-2xl bg-white p-6 text-sm text-slate-600">Halaman ini hanya tersedia untuk dosen dan administrator.</div>;
@@ -271,29 +273,11 @@ export const PengolahanNilai: React.FC = () => {
             </div>
           </div>
 
-          {/* Bobot Lock Indicator */}
-          {hasVerifiedStudents ? (
-            <div className="flex items-center space-x-2 px-3 py-1.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs font-bold">
-              <Lock className="w-4 h-4 text-amber-600" />
-              <span>Bobot Terkunci (Ada Nilai Terverifikasi)</span>
-            </div>
-          ) : (
-            <div className="flex items-center space-x-2 px-3 py-1.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold">
-              <Unlock className="w-4 h-4 text-emerald-600" />
-              <span>Bobot Terbuka (Dapat Diedit)</span>
-            </div>
-          )}
-        </div>
-
-        {/* Warning if locked */}
-        {hasVerifiedStudents && (
-          <div className="mb-4 p-3 rounded-xl bg-amber-50/70 border border-amber-200 text-amber-900 text-xs flex items-start space-x-2.5">
-            <ShieldAlert className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
-            <p className="text-[11px] leading-relaxed">
-              <strong>Pengamanan Integritas Data Akademik:</strong> Terdapat mahasiswa yang telah diverifikasi kelulusannya pada mata kuliah ini. Pengaturan bobot dikunci otomatis agar tidak mengubah hasil nilai resmi. Untuk mengubah bobot, batalkan verifikasi mahasiswa terkait terlebih dahulu.
-            </p>
+          <div className="flex items-center space-x-2 px-3 py-1.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold">
+            <Unlock className="w-4 h-4 text-emerald-600" />
+            <span>Bobot Dinamis (Dapat Diedit)</span>
           </div>
-        )}
+        </div>
 
         {/* Weight Feedback Message */}
         {weightMessage && (
@@ -326,7 +310,6 @@ export const PengolahanNilai: React.FC = () => {
                 min="0"
                 max="100"
                 step="1"
-                disabled={hasVerifiedStudents}
                 value={tugasWeight}
                 onChange={(e) => setTugasWeight(Number(e.target.value))}
                 className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-xs font-bold text-slate-800 focus:ring-2 focus:ring-[#3C8DBC] focus:bg-white focus:outline-hidden disabled:bg-slate-100 disabled:text-slate-400"
@@ -346,7 +329,6 @@ export const PengolahanNilai: React.FC = () => {
                 min="0"
                 max="100"
                 step="1"
-                disabled={hasVerifiedStudents}
                 value={utsWeight}
                 onChange={(e) => setUtsWeight(Number(e.target.value))}
                 className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-xs font-bold text-slate-800 focus:ring-2 focus:ring-[#3C8DBC] focus:bg-white focus:outline-hidden disabled:bg-slate-100 disabled:text-slate-400"
@@ -366,7 +348,6 @@ export const PengolahanNilai: React.FC = () => {
                 min="0"
                 max="100"
                 step="1"
-                disabled={hasVerifiedStudents}
                 value={uasWeight}
                 onChange={(e) => setUasWeight(Number(e.target.value))}
                 className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-xs font-bold text-slate-800 focus:ring-2 focus:ring-[#3C8DBC] focus:bg-white focus:outline-hidden disabled:bg-slate-100 disabled:text-slate-400"
@@ -392,7 +373,7 @@ export const PengolahanNilai: React.FC = () => {
 
             <button
               type="submit"
-              disabled={hasVerifiedStudents || !weightVal.isValid}
+              disabled={!weightVal.isValid}
               className="px-4 py-3 rounded-xl bg-gradient-to-r from-[#367FA9] to-[#3C8DBC] hover:from-[#2e6d92] hover:to-[#347ba4] text-white font-bold text-xs flex items-center space-x-1.5 shadow-sm disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer shrink-0"
             >
               <Save className="w-3.5 h-3.5" />
@@ -452,7 +433,7 @@ export const PengolahanNilai: React.FC = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
-                {classEnrollments.map((enrollment) => {
+                {visibleEnrollments.map((enrollment) => {
                   const student = students.find((s) => s.npm === enrollment.npm);
                   const gradeRecord = classGrades.find((g) => g.pesertaId === enrollment.id) || {
                     id: `temp-${enrollment.id}`,
@@ -668,7 +649,7 @@ export const PengolahanNilai: React.FC = () => {
 
           {/* TAMPILAN MOBILE: Kartu Lipat Adaptif (Responsive Accordion Cards) */}
           <div className="md:hidden space-y-3">
-            {classEnrollments.map((enrollment) => {
+            {visibleEnrollments.map((enrollment) => {
               const student = students.find((s) => s.npm === enrollment.npm);
               const gradeRecord = classGrades.find((g) => g.pesertaId === enrollment.id) || {
                 id: `temp-${enrollment.id}`,
@@ -925,6 +906,7 @@ export const PengolahanNilai: React.FC = () => {
               );
             })}
           </div>
+          <PaginationControls page={studentPage} pageSize={studentPageSize} totalItems={classEnrollments.length} onPageChange={setStudentPage} onPageSizeChange={(size) => { setStudentPageSize(size); setStudentPage(1); }} itemLabel="mahasiswa" />
         </>
       )}
       </div>

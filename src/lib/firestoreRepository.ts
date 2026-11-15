@@ -1,6 +1,6 @@
 import { collection, deleteDoc, doc, onSnapshot, setDoc, writeBatch, type Unsubscribe } from 'firebase/firestore';
 import { firestore } from './firebase';
-import type { User, ProgramStudi, Semester, Kelas, MataKuliah, PenawaranMataKuliah, Mahasiswa, PesertaMataKuliah, BobotNilai, NilaiMahasiswa, RiwayatVerifikasi } from '../types';
+import type { User, ProgramStudi, Semester, Kelas, MataKuliah, PenawaranMataKuliah, Mahasiswa, PesertaMataKuliah, BobotNilai, NilaiMahasiswa, RiwayatVerifikasi, Feedback } from '../types';
 
 export interface FirestoreCollections {
   users: User;
@@ -14,6 +14,7 @@ export interface FirestoreCollections {
   weights: BobotNilai;
   grades: NilaiMahasiswa;
   verificationHistory: RiwayatVerifikasi;
+  feedback: Feedback;
 }
 
 function database() {

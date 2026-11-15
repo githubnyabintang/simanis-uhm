@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
 import { averageIncludingMissing, calculateGrade } from '../../utils/gradeCalculation';
 import { CampusLogo } from '../layout/CampusLogo';
@@ -12,8 +12,11 @@ import {
   BookOpen,
   Info
 } from 'lucide-react';
+import { PaginationControls, paginate } from '../common/PaginationControls';
 
 export const MahasiswaNilaiSaya: React.FC = () => {
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   const {
     currentUser,
     students,
@@ -79,6 +82,7 @@ export const MahasiswaNilaiSaya: React.FC = () => {
   });
 
   const rataRataNilai = averageIncludingMissing(myCoursesWithGrades.map((course) => course.nilaiAkhir));
+  const visibleCourses = paginate(myCoursesWithGrades, page, pageSize);
   const program = programStudi.find((item) => item.id === student.prodiId);
   const semester = semesters.find((item) => item.id === student.semesterId);
   const studentClass = classes.find((item) => item.id === student.kelasAsalId);
@@ -158,7 +162,7 @@ export const MahasiswaNilaiSaya: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {myCoursesWithGrades.map((item) => (
+          {visibleCourses.map((item) => (
             <div
               key={item.enrollment.id}
               className={`bg-white/80 backdrop-blur-2xl rounded-[28px] p-7 border transition-all ${
@@ -248,6 +252,7 @@ export const MahasiswaNilaiSaya: React.FC = () => {
             </div>
           ))}
         </div>
+        <PaginationControls page={page} pageSize={pageSize} totalItems={myCoursesWithGrades.length} onPageChange={setPage} onPageSizeChange={(size) => { setPageSize(size); setPage(1); }} itemLabel="mata kuliah" />
       </div>
 
       {/* Laporan cetak */}
@@ -279,7 +284,7 @@ export const MahasiswaNilaiSaya: React.FC = () => {
 
         <table className="khs-table">
           <thead><tr>
-            <th>No.</th><th>Kd. Matkul</th><th>Nama Matkul</th><th>Nama Dosen</th><th>Huruf</th>
+            <th>No.</th><th>Kd. Matkul</th><th>Nama Matkul</th><th>Nama Dosen</th><th>Nilai</th>
           </tr></thead>
           <tbody>
             {myCoursesWithGrades.map((c, i) => (

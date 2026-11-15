@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useApp } from '../../context/AppContext';
 import { User } from '../../types';
 import { Users, CheckCircle2, Search, Pencil, X } from 'lucide-react';
+import { PaginationControls, paginate } from '../common/PaginationControls';
 
 export const UserManagement: React.FC = () => {
   const { users, updateDosenAccount } = useApp();
@@ -12,6 +13,8 @@ export const UserManagement: React.FC = () => {
   const [editingDosen, setEditingDosen] = useState<User | null>(null);
   const [editName, setEditName] = useState('');
   const [editEmail, setEditEmail] = useState('');
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
 
   const filteredUsers = users.filter((u) => {
     const matchSearch =
@@ -21,6 +24,8 @@ export const UserManagement: React.FC = () => {
     const matchRole = roleFilter === 'all' || u.role === roleFilter;
     return matchSearch && matchRole;
   });
+  const visibleUsers = paginate(filteredUsers, page, pageSize);
+  useEffect(() => setPage(1), [search, roleFilter]);
 
   const openDosenEditor = (user: User) => {
     setEditingDosen(user);
@@ -105,7 +110,7 @@ export const UserManagement: React.FC = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {filteredUsers.map((user) => (
+              {visibleUsers.map((user) => (
                 <tr key={user.id} className="hover:bg-slate-50 transition-colors">
                   <td className="py-3 px-3">
                     <div className="flex items-center space-x-2.5">
@@ -149,6 +154,7 @@ export const UserManagement: React.FC = () => {
             </tbody>
           </table>
         </div>
+        <PaginationControls page={page} pageSize={pageSize} totalItems={filteredUsers.length} onPageChange={setPage} onPageSizeChange={(size) => { setPageSize(size); setPage(1); }} itemLabel="pengguna" />
       </div>
 
       {editingDosen && <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 p-4" onClick={() => setEditingDosen(null)}>

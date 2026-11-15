@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useApp } from '../../context/AppContext';
 import { Mahasiswa } from '../../types';
 import {
@@ -12,6 +12,7 @@ import {
   Filter,
   UserCheck
 } from 'lucide-react';
+import { PaginationControls, paginate } from '../common/PaginationControls';
 
 export const MahasiswaManagement: React.FC = () => {
   const { students, programStudi, semesters, classes, addStudent, updateStudent, deleteStudent } = useApp();
@@ -20,6 +21,8 @@ export const MahasiswaManagement: React.FC = () => {
   const [selectedProdi, setSelectedProdi] = useState('all');
   const [modalOpen, setModalOpen] = useState(false);
   const [editingStudent, setEditingStudent] = useState<Mahasiswa | null>(null);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
 
   // Form fields
   const [npm, setNpm] = useState('');
@@ -38,6 +41,8 @@ export const MahasiswaManagement: React.FC = () => {
     const matchProdi = selectedProdi === 'all' || s.prodiId === selectedProdi;
     return matchSearch && matchProdi;
   });
+  const visibleStudents = paginate(filteredStudents, page, pageSize);
+  useEffect(() => setPage(1), [search, selectedProdi]);
 
   const openAddModal = () => {
     setEditingStudent(null);
@@ -205,7 +210,7 @@ export const MahasiswaManagement: React.FC = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {filteredStudents.map((student) => {
+              {visibleStudents.map((student) => {
                 const prodi = programStudi.find((p) => p.id === student.prodiId);
                 const kls = classes.find((k) => k.id === student.kelasAsalId);
 
@@ -253,6 +258,7 @@ export const MahasiswaManagement: React.FC = () => {
             </tbody>
           </table>
         </div>
+        <PaginationControls page={page} pageSize={pageSize} totalItems={filteredStudents.length} onPageChange={setPage} onPageSizeChange={(size) => { setPageSize(size); setPage(1); }} itemLabel="mahasiswa" />
       </div>
 
       {/* Modal Add / Edit Student */}

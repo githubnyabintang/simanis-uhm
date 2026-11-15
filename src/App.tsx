@@ -21,6 +21,8 @@ import { DosenMataKuliah } from './components/pages/DosenMataKuliah';
 import { MahasiswaNilaiSaya } from './components/pages/MahasiswaNilaiSaya';
 import { MahasiswaDashboard } from './components/pages/MahasiswaDashboard';
 import { UserProfilePage } from './components/pages/UserProfilePage';
+import { FeedbackManagement } from './components/pages/FeedbackManagement';
+import { FeedbackModal } from './components/feedback/FeedbackModal';
 import { Menu } from 'lucide-react';
 
 import { MobileBottomBar } from './components/layout/MobileBottomBar';
@@ -57,6 +59,8 @@ const MainLayout: React.FC = () => {
         return [{ label: 'Akademik Mahasiswa' }, { label: 'Dashboard Mahasiswa', active: true }];
       case 'profile':
         return [{ label: 'Akun' }, { label: 'Profil Saya', active: true }];
+      case 'feedback':
+        return [{ label: 'Feedback' }, { label: 'Masukan Pengguna', active: true }];
       default:
         return [{ label: 'Dashboard', active: true }];
     }
@@ -86,13 +90,15 @@ const MainLayout: React.FC = () => {
         return <MahasiswaDashboard />;
       case 'profile':
         return <UserProfilePage />;
+      case 'feedback':
+        return <FeedbackManagement />;
       default:
         return <AdminDashboard />;
     }
   };
 
   const rolePages: Record<string, string[]> = {
-    admin: ['dashboard', 'mahasiswa', 'matakuliah', 'users', 'penawaran', 'peserta', 'pengolahan-nilai', 'profile'],
+    admin: ['dashboard', 'mahasiswa', 'matakuliah', 'users', 'penawaran', 'peserta', 'pengolahan-nilai', 'feedback', 'profile'],
     dosen: ['dosen-matakuliah', 'pengolahan-nilai', 'profile'],
     mahasiswa: ['dashboard-mahasiswa', 'nilai-saya', 'profile']
   };
@@ -131,6 +137,7 @@ export default function App() {
   return (
     <AppProvider>
       <MainLayout />
+      <FeedbackModal />
     </AppProvider>
   );
 }

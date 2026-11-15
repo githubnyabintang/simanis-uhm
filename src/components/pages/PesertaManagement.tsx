@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useApp } from '../../context/AppContext';
 import { UserCheck, UserPlus, Trash2, CheckCircle2, AlertCircle, Search } from 'lucide-react';
+import { PaginationControls, paginate } from '../common/PaginationControls';
 
 export const PesertaManagement: React.FC = () => {
   const {
@@ -30,6 +31,10 @@ export const PesertaManagement: React.FC = () => {
   const [selectedNpm, setSelectedNpm] = useState(availableStudents[0]?.npm || '');
   const [actionNotice, setActionNotice] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const visibleEnrollments = paginate(classEnrollments, page, pageSize);
+  useEffect(() => setPage(1), [activeOfferingId]);
 
   const handleEnroll = (e: React.FormEvent) => {
     e.preventDefault();
@@ -175,11 +180,11 @@ export const PesertaManagement: React.FC = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
-                {classEnrollments.map((enr, idx) => {
+                {visibleEnrollments.map((enr, idx) => {
                   const student = students.find((s) => s.npm === enr.npm);
                   return (
                     <tr key={enr.id} className="hover:bg-slate-50 transition-colors">
-                      <td className="py-3 px-3 text-slate-400 font-mono">{idx + 1}</td>
+                      <td className="py-3 px-3 text-slate-400 font-mono">{(page - 1) * pageSize + idx + 1}</td>
                       <td className="py-3 px-3 font-mono font-bold text-[#045A8C]">{enr.npm}</td>
                       <td className="py-3 px-3 font-bold text-slate-800">{student?.nama || 'Mahasiswa'}</td>
                       <td className="py-3 px-3 font-mono text-slate-500 text-[11px]">{student?.email}</td>
@@ -202,6 +207,7 @@ export const PesertaManagement: React.FC = () => {
             </table>
           </div>
         )}
+        {classEnrollments.length > 0 && <PaginationControls page={page} pageSize={pageSize} totalItems={classEnrollments.length} onPageChange={setPage} onPageSizeChange={(size) => { setPageSize(size); setPage(1); }} itemLabel="peserta" />}
       </div>
     </div>
   );

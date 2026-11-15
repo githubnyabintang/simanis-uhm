@@ -15,7 +15,8 @@ import {
   ChevronLeft,
   ChevronRight,
   PanelLeftClose,
-  PanelLeftOpen
+  PanelLeftOpen,
+  MessageSquareHeart
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -24,7 +25,7 @@ interface SidebarProps {
 }
 
 export const Sidebar: React.FC<SidebarProps> = () => {
-  const { activePage, setActivePage, currentUser, logout } = useApp();
+  const { activePage, setActivePage, currentUser, logout, openFeedbackModal } = useApp();
   const [isSlim, setIsSlim] = useState(false);
 
   const handleNav = (page: string) => {
@@ -123,7 +124,8 @@ export const Sidebar: React.FC<SidebarProps> = () => {
               <div className="space-y-1">
                 {[
                   { id: 'penawaran', label: 'Periode & Kelas', icon: Calendar },
-                  { id: 'peserta', label: 'Peserta MK', icon: UserCheck }
+                  { id: 'peserta', label: 'Peserta MK', icon: UserCheck },
+                  { id: 'feedback', label: 'Feedback Pengguna', icon: MessageSquareHeart }
                 ].map((item) => {
                   const Icon = item.icon;
                   const isActive = activePage === item.id;
@@ -200,14 +202,15 @@ export const Sidebar: React.FC<SidebarProps> = () => {
               <div className="space-y-1">
                 {[
                   { id: 'dosen-matakuliah', label: 'Mata Kuliah Saya', icon: BookOpen },
-                  { id: 'pengolahan-nilai', label: 'Pengolahan Nilai & Bobot', icon: Award }
+                  { id: 'pengolahan-nilai', label: 'Pengolahan Nilai & Bobot', icon: Award },
+                  { id: 'feedback', label: 'Feedback', icon: MessageSquareHeart, action: openFeedbackModal }
                 ].map((item) => {
                   const Icon = item.icon;
                   const isActive = activePage === item.id;
                   return (
                     <button
                       key={item.id}
-                      onClick={() => handleNav(item.id)}
+                      onClick={() => item.action ? item.action() : handleNav(item.id)}
                       title={isSlim ? item.label : undefined}
                       className={`w-full flex items-center px-3 py-2.5 rounded-xl text-xs transition-all cursor-pointer ${
                         isSlim ? 'justify-center' : 'space-x-3'
@@ -248,6 +251,14 @@ export const Sidebar: React.FC<SidebarProps> = () => {
                 >
                   <LayoutDashboard className="w-4 h-4 shrink-0" />
                   {!isSlim && <span className="truncate">Dashboard Mahasiswa</span>}
+                </button>
+                <button
+                  onClick={openFeedbackModal}
+                  title={isSlim ? 'Feedback' : undefined}
+                  className={`w-full flex items-center px-3 py-2.5 rounded-xl text-xs transition-all cursor-pointer ${isSlim ? 'justify-center' : 'space-x-3'} text-slate-600 hover:text-slate-900 hover:bg-slate-50 font-medium`}
+                >
+                  <MessageSquareHeart className="w-4 h-4 shrink-0" />
+                  {!isSlim && <span className="truncate">Feedback</span>}
                 </button>
                 <button
                   onClick={() => handleNav('nilai-saya')}

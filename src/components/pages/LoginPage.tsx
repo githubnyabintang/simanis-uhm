@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
 import { CampusLogo } from '../layout/CampusLogo';
-import { User, Lock, Eye, EyeOff, LogIn, Info, AlertCircle, Sparkles } from 'lucide-react';
+import { User, Lock, Eye, EyeOff, LogIn, Info, AlertCircle, MessageSquareHeart } from 'lucide-react';
 
 export const LoginPage: React.FC = () => {
-  const { login } = useApp();
+  const { login, openFeedbackModal } = useApp();
   const [identifier, setIdentifier] = useState('admin');
   const [password, setPassword] = useState('••••••••••••');
   const [showPassword, setShowPassword] = useState(false);
@@ -152,6 +152,10 @@ export const LoginPage: React.FC = () => {
             Mengalami kendala login? <span className="font-bold text-[#045A8C] underline cursor-pointer">Hubungi Helpdesk BAAK UHM</span> atau WhatsApp Administrator (<span className="font-mono text-slate-700">+62 811-400-UHM</span>).
           </p>
         </div>
+
+        <button type="button" onClick={openFeedbackModal} className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl border border-blue-200 bg-white px-4 py-2.5 text-xs font-bold text-[#045A8C] hover:bg-blue-50">
+          <MessageSquareHeart className="h-4 w-4" /> Berikan Feedback sebagai Pengunjung
+        </button>
 
       </div>
 

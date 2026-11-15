@@ -120,3 +120,16 @@ export interface RiwayatVerifikasi {
   nilaiSebelum?: { tugas: number | null; uts: number | null; uas: number | null };
   nilaiSesudah?: { tugas: number | null; uts: number | null; uas: number | null };
 }
+
+export interface Feedback {
+  id: string;
+  nama: string;
+  email: string;
+  role: 'dosen' | 'mahasiswa' | 'pengunjung';
+  userId?: string;
+  ratingTampilan: number;
+  ratingNavigasi: number;
+  ratingKenyamanan: number;
+  saran: string;
+  createdAt: string;
+}

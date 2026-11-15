@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
 import { CheckCircle2, Clock3 } from 'lucide-react';
+import { PaginationControls, paginate } from '../common/PaginationControls';
 
 export const GradeRevisionQueue: React.FC = () => {
   const { courses, offerings, students, users, classes, grades, decideGradeRevision } = useApp();
   const [decisionNotes, setDecisionNotes] = useState<Record<string, string>>({});
   const [notice, setNotice] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   const requests = grades.filter((grade) => grade.statusPermintaanRevisi === 'Menunggu Persetujuan');
+  const visibleRequests = paginate(requests, page, pageSize);
 
   const decide = (gradeId: string, approve: boolean) => {
     const result = decideGradeRevision(gradeId, approve, decisionNotes[gradeId] || '');
@@ -38,7 +42,7 @@ export const GradeRevisionQueue: React.FC = () => {
           <p className="mt-1 text-xs text-slate-500">Permintaan dari dosen akan tampil di sini.</p>
         </div>
       ) : <div className="space-y-3">
-        {requests.map((grade) => {
+        {visibleRequests.map((grade) => {
           const offering = offerings.find((item) => item.id === grade.penawaranId);
           const course = courses.find((item) => item.id === offering?.mataKuliahId);
           const student = students.find((item) => item.npm === grade.npm);
@@ -63,6 +67,7 @@ export const GradeRevisionQueue: React.FC = () => {
           </article>;
         })}
       </div>}
+      {requests.length > 0 && <PaginationControls page={page} pageSize={pageSize} totalItems={requests.length} onPageChange={setPage} onPageSizeChange={(size) => { setPageSize(size); setPage(1); }} itemLabel="permintaan" />}
     </section>
   );
 };

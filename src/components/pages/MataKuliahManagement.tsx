@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useApp } from '../../context/AppContext';
 import { MataKuliah } from '../../types';
 import { BookOpen, Plus, Search, Edit2, Trash2, CheckCircle2, AlertCircle } from 'lucide-react';
+import { PaginationControls, paginate } from '../common/PaginationControls';
 
 export const MataKuliahManagement: React.FC = () => {
   const { courses, addCourse, updateCourse, deleteCourse, offerings } = useApp();
   const [search, setSearch] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
   const [editingCourse, setEditingCourse] = useState<MataKuliah | null>(null);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
 
   // Form states
   const [kodeMK, setKodeMK] = useState('');
@@ -22,6 +25,8 @@ export const MataKuliahManagement: React.FC = () => {
     c.namaMK.toLowerCase().includes(search.toLowerCase()) ||
     c.kodeMK.toLowerCase().includes(search.toLowerCase())
   );
+  const visibleCourses = paginate(filteredCourses, page, pageSize);
+  useEffect(() => setPage(1), [search]);
 
   const openAdd = () => {
     setEditingCourse(null);
@@ -163,7 +168,7 @@ export const MataKuliahManagement: React.FC = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {filteredCourses.map((course) => {
+              {visibleCourses.map((course) => {
                 const linkedOfferings = offerings.filter((o) => o.mataKuliahId === course.id);
 
                 return (
@@ -212,6 +217,7 @@ export const MataKuliahManagement: React.FC = () => {
             </tbody>
           </table>
         </div>
+        <PaginationControls page={page} pageSize={pageSize} totalItems={filteredCourses.length} onPageChange={setPage} onPageSizeChange={(size) => { setPageSize(size); setPage(1); }} itemLabel="mata kuliah" />
       </div>
 
       {/* Modal Form */}

@@ -10,7 +10,8 @@ import {
   PesertaMataKuliah,
   BobotNilai,
   NilaiMahasiswa,
-  RiwayatVerifikasi
+  RiwayatVerifikasi,
+  Feedback
 } from '../types';
 import {
   INITIAL_USERS,
@@ -52,6 +53,10 @@ interface AppContextType {
   weights: BobotNilai[];
   grades: NilaiMahasiswa[];
   verificationHistory: RiwayatVerifikasi[];
+  feedback: Feedback[];
+  feedbackModalOpen: boolean;
+  openFeedbackModal: () => void;
+  closeFeedbackModal: () => void;
 
   // Auth
   login: (identifier: string, password: string) => { success: boolean; error?: string };
@@ -84,6 +89,7 @@ interface AppContextType {
   decideGradeRevision: (nilaiId: string, approve: boolean, note: string) => { success: boolean; error?: string };
   updateDosenAccount: (userId: string, name: string, email: string) => { success: boolean; error?: string };
   updateOwnProfile: (name: string, email: string) => { success: boolean; error?: string };
+  submitFeedback: (data: Omit<Feedback, 'id' | 'createdAt'>) => { success: boolean; error?: string };
 
   // Reset demo
   resetToDefault: () => void;
@@ -99,6 +105,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [activePeriod, setActivePeriod] = useState<string>('2026/2027 — Ganjil');
   const [activePage, setActivePageState] = useState<string>('login');
   const [selectedPenawaranId, setSelectedPenawaranId] = useState<string | null>('pnw-rpl-s2a');
+  const [feedbackModalOpen, setFeedbackModalOpen] = useState(false);
 
   const [users, setUsers, usersReady, usersError] = useFirestoreCollection('users');
   const [programStudi, setProgramStudi, prodiReady, prodiError] = useFirestoreCollection('programStudi');
@@ -111,8 +118,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [weights, setWeights, weightsReady, weightsError] = useFirestoreCollection('weights');
   const [grades, setGrades, gradesReady, gradesError] = useFirestoreCollection('grades');
   const [verificationHistory, setVerificationHistory, historyReady, historyError] = useFirestoreCollection('verificationHistory');
-  const firestoreError = usersError || prodiError || semestersError || classesError || coursesError || offeringsError || studentsError || enrollmentsError || weightsError || gradesError || historyError;
-  const firestoreReady = usersReady && prodiReady && semestersReady && classesReady && coursesReady && offeringsReady && studentsReady && enrollmentsReady && weightsReady && gradesReady && historyReady;
+  const [feedback, setFeedback, feedbackReady, feedbackError] = useFirestoreCollection('feedback');
+  const firestoreError = usersError || prodiError || semestersError || classesError || coursesError || offeringsError || studentsError || enrollmentsError || weightsError || gradesError || historyError || feedbackError;
+  const firestoreReady = usersReady && prodiReady && semestersReady && classesReady && coursesReady && offeringsReady && studentsReady && enrollmentsReady && weightsReady && gradesReady && historyReady && feedbackReady;
 
   useEffect(() => {
     if (!usersReady) return;
@@ -126,7 +134,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const setActivePage = (page: string, penawaranId?: string | null) => {
     const allowedByRole: Record<string, string[]> = {
-      admin: ['dashboard', 'mahasiswa', 'matakuliah', 'users', 'penawaran', 'peserta', 'pengolahan-nilai', 'profile'],
+      admin: ['dashboard', 'mahasiswa', 'matakuliah', 'users', 'penawaran', 'peserta', 'pengolahan-nilai', 'feedback', 'profile'],
       dosen: ['dosen-matakuliah', 'pengolahan-nilai', 'profile'],
       mahasiswa: ['dashboard-mahasiswa', 'nilai-saya', 'profile']
     };
@@ -176,6 +184,20 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const logout = () => {
     setCurrentUser(null);
     setActivePageState('login');
+    setFeedbackModalOpen(false);
+  };
+
+  const openFeedbackModal = () => setFeedbackModalOpen(true);
+  const closeFeedbackModal = () => setFeedbackModalOpen(false);
+
+  const submitFeedback = (data: Omit<Feedback, 'id' | 'createdAt'>) => {
+    if (!data.nama.trim() || !data.email.trim()) return { success: false, error: 'Nama dan email wajib diisi.' };
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email.trim())) return { success: false, error: 'Format email tidak valid.' };
+    if (![1, 2, 3, 4, 5].includes(data.ratingTampilan) || ![1, 2, 3, 4, 5].includes(data.ratingNavigasi) || ![1, 2, 3, 4, 5].includes(data.ratingKenyamanan)) {
+      return { success: false, error: 'Setiap pertanyaan rating wajib diberi nilai 1 sampai 5 bintang.' };
+    }
+    setFeedback((previous) => [...previous, { ...data, id: `fb-${Date.now()}`, createdAt: new Date().toISOString() }]);
+    return { success: true };
   };
 
   const resetToDefault = () => {
@@ -379,19 +401,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // Bobot penilaian
   const saveWeights = (penawaranId: string, tugas: number, uts: number, uas: number) => {
-    if (currentUser?.role !== 'dosen') return { success: false, error: 'Hanya dosen yang dapat mengatur bobot penilaian.' };
-    const assignedOffering = offerings.find((offering) => offering.id === penawaranId && offering.dosenId === currentUser.id);
-    if (!assignedOffering) return { success: false, error: 'Anda tidak memiliki akses ke mata kuliah ini.' };
-    // 1. Check if any student has verified grade in this penawaran
-    const hasVerified = grades.some((g) => g.penawaranId === penawaranId && g.statusVerifikasi === 'Terverifikasi');
-    if (hasVerified) {
-      return {
-        success: false,
-        error: 'Bobot terkunci karena terdapat nilai mahasiswa yang sudah terverifikasi. Batalkan verifikasi terlebih dahulu untuk mengubah bobot penilaian.'
-      };
-    }
+    if (currentUser?.role !== 'dosen' && currentUser?.role !== 'admin') return { success: false, error: 'Anda tidak berwenang mengatur bobot penilaian.' };
+    const offering = offerings.find((item) => item.id === penawaranId);
+    if (!offering || (currentUser.role === 'dosen' && offering.dosenId !== currentUser.id)) return { success: false, error: 'Anda tidak memiliki akses ke mata kuliah ini.' };
 
-    // 2. Validate weights sum up to exactly 100%
+    // Bobot tetap wajib total tepat 100%, termasuk setelah nilai diverifikasi.
     const validation = validateWeights(tugas, uts, uas);
     if (!validation.isValid) {
       return { success: false, error: validation.error };
@@ -729,6 +743,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         weights,
         grades,
         verificationHistory,
+        feedback,
+        feedbackModalOpen,
+        openFeedbackModal,
+        closeFeedbackModal,
         login,
         quickLogin,
         logout,
@@ -750,6 +768,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         decideGradeRevision,
         updateDosenAccount,
         updateOwnProfile,
+        submitFeedback,
         resetToDefault
       }}
     >

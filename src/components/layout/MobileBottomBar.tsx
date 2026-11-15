@@ -16,11 +16,12 @@ import {
   ShieldCheck,
   ChevronRight,
   RefreshCw,
-  CheckCircle2
+  CheckCircle2,
+  MessageSquareHeart
 } from 'lucide-react';
 
 export const MobileBottomBar: React.FC = () => {
-  const { activePage, setActivePage, currentUser, logout } = useApp();
+  const { activePage, setActivePage, currentUser, logout, openFeedbackModal } = useApp();
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   const role = currentUser?.role || 'admin';
@@ -278,6 +279,9 @@ export const MobileBottomBar: React.FC = () => {
                         </div>
                         <ChevronRight className="w-4 h-4 opacity-50" />
                       </button>
+                      <button onClick={() => handleNav('feedback')} className={`w-full flex items-center justify-between p-3 rounded-2xl ${activePage === 'feedback' ? 'bg-gradient-to-r from-[#367FA9] to-[#3C8DBC] text-white font-bold' : 'bg-slate-50/80 text-slate-700'}`}>
+                        <div className="flex items-center space-x-3"><MessageSquareHeart className="w-4 h-4" /><span>Feedback Pengguna</span></div><ChevronRight className="w-4 h-4 opacity-50" />
+                      </button>
 
                     </div>
                   </div>
@@ -320,6 +324,9 @@ export const MobileBottomBar: React.FC = () => {
                       </div>
                       <ChevronRight className="w-4 h-4 opacity-50" />
                     </button>
+                    <button onClick={() => { openFeedbackModal(); setDrawerOpen(false); }} className="w-full flex items-center justify-between p-3 rounded-2xl bg-slate-50/80 text-slate-700">
+                      <div className="flex items-center space-x-3"><MessageSquareHeart className="w-4 h-4" /><span>Feedback</span></div><ChevronRight className="w-4 h-4 opacity-50" />
+                    </button>
                   </div>
                 </div>
               )}
@@ -351,6 +358,9 @@ export const MobileBottomBar: React.FC = () => {
                         <span>Daftar Nilai Saya</span>
                       </div>
                       <ChevronRight className="w-4 h-4 opacity-50" />
+                    </button>
+                    <button onClick={() => { openFeedbackModal(); setDrawerOpen(false); }} className="w-full flex items-center justify-between p-3 rounded-2xl bg-slate-50/80 text-slate-700">
+                      <div className="flex items-center space-x-3"><MessageSquareHeart className="w-4 h-4" /><span>Feedback</span></div><ChevronRight className="w-4 h-4 opacity-50" />
                     </button>
 
                   </div>

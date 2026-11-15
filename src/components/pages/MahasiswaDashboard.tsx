@@ -1,13 +1,16 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useApp } from '../../context/AppContext';
 import { averageIncludingMissing, calculateGrade } from '../../utils/gradeCalculation';
 import { Award, BookOpen, GraduationCap, Search, TrendingUp } from 'lucide-react';
+import { PaginationControls, paginate } from '../common/PaginationControls';
 
 export const MahasiswaDashboard: React.FC = () => {
   const { currentUser, students, enrollments, offerings, courses, classes, semesters, users, weights, grades } = useApp();
   const [query, setQuery] = useState('');
   const [semesterFilter, setSemesterFilter] = useState('all');
   const [selectedEnrollmentId, setSelectedEnrollmentId] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
 
   const student = students.find((item) => item.userId === currentUser?.id || item.npm === currentUser?.npm);
   const courseRows = useMemo(() => {
@@ -57,6 +60,8 @@ export const MahasiswaDashboard: React.FC = () => {
     const matchesSemester = semesterFilter === 'all' || row.offering?.semesterId === semesterFilter;
     return matchesQuery && matchesSemester;
   });
+  const visibleRows = paginate(filteredRows, page, pageSize);
+  useEffect(() => setPage(1), [query, semesterFilter]);
   const selected = courseRows.find((row) => row.enrollment.id === selectedEnrollmentId);
   const summary = [
     { label: 'Mata kuliah diikuti', value: courseRows.length, icon: BookOpen, style: 'bg-blue-100 text-blue-700' },
@@ -130,7 +135,7 @@ export const MahasiswaDashboard: React.FC = () => {
           <table className="w-full min-w-[760px] text-left text-xs">
             <thead className="bg-slate-50 text-[10px] uppercase tracking-wide text-slate-500"><tr><th className="p-3">Mata Kuliah</th><th className="p-3">Semester</th><th className="p-3">Kelas</th><th className="p-3">Dosen Pengampu</th><th className="p-3">Nilai</th><th className="p-3">Status</th></tr></thead>
             <tbody className="divide-y divide-slate-100">
-              {filteredRows.map((row) => <tr key={row.enrollment.id} onClick={() => setSelectedEnrollmentId(row.enrollment.id)} className="cursor-pointer hover:bg-blue-50/60">
+              {visibleRows.map((row) => <tr key={row.enrollment.id} onClick={() => setSelectedEnrollmentId(row.enrollment.id)} className="cursor-pointer hover:bg-blue-50/60">
                 <td className="p-3"><strong className="block text-slate-800">{row.course?.namaMK}</strong><span className="font-mono text-[10px] text-slate-400">{row.course?.kodeMK}</span></td>
                 <td className="p-3">{row.semester?.namaSemester || '—'}</td><td className="p-3">{row.classInfo?.kodeKelas || '—'}</td><td className="p-3">{row.lecturer?.name || '—'}</td>
                 <td className="p-3 font-mono font-bold">{row.nilaiAkhir === null ? '—' : row.nilaiAkhir.toFixed(2)}</td><td className="p-3"><span className={`rounded-full px-2.5 py-1 text-[10px] font-bold ${row.isVerified ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}`}>{row.status}</span></td>
@@ -139,6 +144,7 @@ export const MahasiswaDashboard: React.FC = () => {
             </tbody>
           </table>
         </div>
+        <PaginationControls page={page} pageSize={pageSize} totalItems={filteredRows.length} onPageChange={setPage} onPageSizeChange={(size) => { setPageSize(size); setPage(1); }} itemLabel="mata kuliah" />
       </section>
 
       {selected && <div className="fixed inset-0 z-50 flex items-end justify-center bg-slate-900/40 p-3 sm:items-center" onClick={() => setSelectedEnrollmentId(null)}>

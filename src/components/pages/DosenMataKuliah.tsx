@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
 import { BookOpen, Users, Sliders, FileText, ArrowRight, CheckCircle2, Clock } from 'lucide-react';
+import { PaginationControls, paginate } from '../common/PaginationControls';
 
 export const DosenMataKuliah: React.FC = () => {
   const { offerings, courses, classes, currentUser, enrollments, grades, weights, setActivePage } = useApp();
@@ -9,6 +10,9 @@ export const DosenMataKuliah: React.FC = () => {
   const lecturerOfferings = offerings.filter((o) =>
     currentUser?.role === 'admin' ? true : o.dosenId === currentUser?.id
   );
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const visibleOfferings = paginate(lecturerOfferings, page, pageSize);
 
   return (
     <div className="space-y-6 pb-12 animate-in fade-in">
@@ -29,7 +33,7 @@ export const DosenMataKuliah: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {lecturerOfferings.map((off) => {
+        {visibleOfferings.map((off) => {
           const course = courses.find((c) => c.id === off.mataKuliahId);
           const kls = classes.find((k) => k.id === off.kelasId);
           const classStudents = enrollments.filter((e) => e.penawaranId === off.id);
@@ -92,6 +96,7 @@ export const DosenMataKuliah: React.FC = () => {
           );
         })}
       </div>
+      <PaginationControls page={page} pageSize={pageSize} totalItems={lecturerOfferings.length} onPageChange={setPage} onPageSizeChange={(size) => { setPageSize(size); setPage(1); }} itemLabel="mata kuliah" />
     </div>
   );
 };
