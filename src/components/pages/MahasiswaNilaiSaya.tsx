@@ -9,13 +9,16 @@ import {
   Clock,
   Lock,
   BookOpen,
-  Info
+  Info,
+  Printer
 } from 'lucide-react';
 import { PaginationControls, paginate } from '../common/PaginationControls';
+import { CourseGradeReport } from './CourseGradeReport';
 
 export const MahasiswaNilaiSaya: React.FC = () => {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+  const [printEnrollmentId, setPrintEnrollmentId] = useState<string | null>(null);
   const {
     currentUser,
     students,
@@ -82,11 +85,20 @@ export const MahasiswaNilaiSaya: React.FC = () => {
 
   const rataRataNilai = averageIncludingMissing(myCoursesWithGrades.map((course) => course.nilaiAkhir));
   const visibleCourses = paginate(myCoursesWithGrades, page, pageSize);
+  const printableCourse = myCoursesWithGrades.find((item) => item.enrollment.id === printEnrollmentId);
   const program = programStudi.find((item) => item.id === student.prodiId);
   const semester = semesters.find((item) => item.id === student.semesterId);
   const studentClass = classes.find((item) => item.id === student.kelasAsalId);
   const periods = [...new Set(myCoursesWithGrades.map((item) => item.offering?.periodeAkademik).filter((value): value is string => Boolean(value)))];
   const printDate = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+
+  React.useEffect(() => {
+    if (!printEnrollmentId) return;
+    const timer = window.setTimeout(() => window.print(), 100);
+    const clearPrintTarget = () => setPrintEnrollmentId(null);
+    window.addEventListener('afterprint', clearPrintTarget);
+    return () => { window.clearTimeout(timer); window.removeEventListener('afterprint', clearPrintTarget); };
+  }, [printEnrollmentId]);
 
   return (
     <div className="space-y-6 pb-12 animate-in fade-in">
@@ -228,11 +240,18 @@ export const MahasiswaNilaiSaya: React.FC = () => {
                   </p>
                 </div>
               )}
+              <div className="mt-5 border-t border-slate-100 pt-4">
+                <button type="button" onClick={() => setPrintEnrollmentId(item.enrollment.id)} className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-blue-200 bg-blue-50 px-4 py-2.5 text-xs font-bold text-[#045A8C] transition-colors hover:bg-blue-100">
+                  <Printer className="h-4 w-4" /> Cetak Nilai Mata Kuliah
+                </button>
+              </div>
             </div>
           ))}
         </div>
         <PaginationControls page={page} pageSize={pageSize} totalItems={myCoursesWithGrades.length} onPageChange={setPage} onPageSizeChange={(size) => { setPageSize(size); setPage(1); }} itemLabel="mata kuliah" />
       </div>
+
+      {printableCourse && <CourseGradeReport offering={printableCourse.offering} course={printableCourse.course} classInfo={printableCourse.kls} lecturer={printableCourse.lecturer} enrollments={[printableCourse.enrollment]} students={[student]} grades={printableCourse.gradeRecord ? [printableCourse.gradeRecord] : []} weight={printableCourse.weights} />}
 
       {/* Laporan cetak */}
       <div className="hidden" aria-hidden="true">

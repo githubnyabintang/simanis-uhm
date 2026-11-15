@@ -65,7 +65,7 @@ Mata kuliah berkode `RPL701` menggunakan nama **Sistem Komputer**. Kode mata kul
 
 ## Cetak Laporan Nilai Mata Kuliah
 
-Dosen dapat memilih tombol **Cetak Nilai MK** pada setiap kartu di halaman **Mata Kuliah Saya** untuk langsung mencetak laporan kelas tersebut. Tombol **Cetak Laporan** juga tersedia setelah dosen membuka halaman **Pengolahan Nilai & Bobot**. Dokumen dicetak per mata kuliah dengan judul `Laporan Nilai Mata Kuliah [Nama Mata Kuliah]`, tanpa tanda garis pemisah pada judul.
+Dosen dapat memilih tombol **Cetak Nilai MK** pada setiap kartu di halaman **Mata Kuliah Saya** untuk langsung mencetak laporan kelas tersebut. Pada akun mahasiswa, setiap kartu di **Daftar Nilai Saya** memiliki tombol **Cetak Nilai Mata Kuliah** untuk mencetak rincian nilai pribadi pada mata kuliah yang dipilih. Tombol **Cetak Laporan** juga tersedia setelah dosen membuka halaman **Pengolahan Nilai & Bobot**. Dokumen dicetak per mata kuliah dengan judul `Laporan Nilai Mata Kuliah [Nama Mata Kuliah]`, tanpa tanda garis pemisah pada judul.
 
 Laporan menggunakan tampilan cetak modern bernuansa biru profesional dan memuat kode mata kuliah, SKS, kelas, periode akademik, serta dosen pengampu. Tabel mencantumkan seluruh peserta kelas dengan kolom nomor, NPM, nama mahasiswa, Tugas, UTS, UAS, **Nilai Akhir**, dan **Nilai Huruf**.
 

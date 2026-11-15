@@ -17,6 +17,7 @@ interface CourseGradeReportProps {
 export const CourseGradeReport: React.FC<CourseGradeReportProps> = ({ offering, course, classInfo, lecturer, enrollments, students, grades, weight }) => {
   const currentWeight = weight || { bobotTugas: 30, bobotUTS: 30, bobotUAS: 40 };
   const printDate = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+  const isStudentReport = enrollments.length === 1;
 
   return <article className="print-only course-grade-report">
     <header className="course-report-header">
@@ -24,7 +25,7 @@ export const CourseGradeReport: React.FC<CourseGradeReportProps> = ({ offering, 
       <div>
         <p className="course-report-eyebrow">UNIVERSITAS HANDAYANI MAKASSAR</p>
         <h1>Laporan Nilai Mata Kuliah {course?.namaMK || 'Mata Kuliah'}</h1>
-        <p className="course-report-subtitle">Rekapitulasi hasil penilaian peserta perkuliahan</p>
+        <p className="course-report-subtitle">{isStudentReport ? 'Rincian hasil penilaian mahasiswa per mata kuliah' : 'Rekapitulasi hasil penilaian peserta perkuliahan'}</p>
       </div>
       <div className="course-report-code"><strong>{course?.kodeMK || 'MK'}</strong><span>{course?.sks || 0} SKS</span></div>
     </header>
