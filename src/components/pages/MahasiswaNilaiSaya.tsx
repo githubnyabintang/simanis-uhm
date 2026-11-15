@@ -310,7 +310,7 @@ export const MahasiswaNilaiSaya: React.FC = () => {
             <p>Makassar, {printDate}</p>
             <p>Ketua Program Studi{program?.namaProdi ? ` ${program.namaProdi}` : ''}</p>
             <div className="khs-signature-space" />
-            <p className="khs-signature-line">(.................................................)</p>
+            <p className="khs-signature-line">Dr. Eng. Ir. Hazriani, S.Kom., M.T.</p>
           </div>
         </div>
       </div>

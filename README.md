@@ -67,7 +67,7 @@ Mata kuliah berkode `RPL701` menggunakan nama **Sistem Komputer**. Kode mata kul
 
 Mahasiswa dapat membuka menu **Daftar Nilai Saya**, lalu memilih **Cetak Daftar Nilai**. Dokumen menggunakan kop surat dan logo Universitas Handayani Makassar, identitas mahasiswa, tahun akademik, semester, serta kelas dari data yang tersedia di Firestore.
 
-Tabel cetak memuat nomor, kode mata kuliah, nama mata kuliah, nama dosen, dan kolom **Nilai** (huruf mutu). Di bawah tabel terdapat **Ringkasan Rata-rata Nilai** dalam persen dan ruang tanda tangan ketua program studi. Kolom SKS, nilai akhir angka, dan status tidak ditampilkan pada tabel cetak.
+Tabel cetak memuat nomor, kode mata kuliah, nama mata kuliah, nama dosen, dan kolom **Nilai** (huruf mutu). Di bawah tabel terdapat **Ringkasan Rata-rata Nilai** dalam persen serta blok tanda tangan Ketua Program Studi dengan nama **Dr. Eng. Ir. Hazriani, S.Kom., M.T.** Kolom SKS, nilai akhir angka, dan status tidak ditampilkan pada tabel cetak.
 
 Dokumen tetap dapat dicetak saat nilai belum lengkap atau belum diverifikasi. Nilai lengkap yang belum diverifikasi termasuk dalam perhitungan sebagai nilai sementara; mata kuliah tanpa nilai akhir yang dapat dihitung tetap dihitung sebagai 0 dalam rata-rata.
 
