@@ -7,7 +7,7 @@
 1. **Mahabintang Pallawabonang (2026130027)**
 2. **Nur Azizah Arafah (2026130021)**
 
-SIMANIS UHM adalah Sistem Informasi Manajemen Nilai Mahasiswa untuk Universitas Handayani Makassar. Aplikasi ini membantu administrator mengelola data akademik, dosen mengolah dan memverifikasi nilai, serta mahasiswa melihat dan mencetak daftar nilainya.
+SIMANIS UHM adalah Sistem Informasi Manajemen Nilai Mahasiswa untuk Universitas Handayani Makassar. Aplikasi ini membantu administrator mengelola data akademik, dosen mengolah dan memverifikasi nilai, serta mahasiswa melihat dan mencetak laporan nilai per mata kuliah.
 
 Project ini dikembangkan untuk **tugas dan demonstrasi**. Data contoh dan cara login saat ini belum memberikan perlindungan yang memadai untuk data akademik atau akun nyata.
 
@@ -25,7 +25,7 @@ Project ini dikembangkan untuk **tugas dan demonstrasi**. Data contoh dan cara l
 |---|---|
 | Administrator | Dashboard ringkasan, pengelolaan mahasiswa, mata kuliah, akun dosen, penawaran kelas, peserta, pengaturan bobot seluruh kelas, keputusan revisi nilai, serta melihat semua feedback. |
 | Dosen | Melihat mata kuliah yang diampu, mengatur bobot, memasukkan Tugas/UTS/UAS, memverifikasi nilai, mencetak laporan nilai per mata kuliah, meminta revisi nilai terverifikasi, serta mengirim feedback. |
-| Mahasiswa | Dashboard studi, grafik dan rata-rata nilai, daftar nilai, profil, serta mengirim feedback. |
+| Mahasiswa | Dashboard studi, grafik dan rata-rata nilai, daftar nilai, cetak laporan nilai per mata kuliah, profil, serta mengirim feedback. |
 
 Menu yang terlihat mengikuti role akun di aplikasi. Administrator tidak dapat mengubah komponen nilai mahasiswa; administrator hanya mengatur bobot, memberi keputusan revisi, dan melihat feedback. Pengolahan komponen nilai serta verifikasi tetap dilakukan dosen pengampu.
 
@@ -33,7 +33,7 @@ Menu yang terlihat mengikuti role akun di aplikasi. Administrator tidak dapat me
 
 Daftar data menggunakan pagination sisi-klien dengan pilihan **10**, **20**, atau **30** baris/kartu per halaman. Kontrol menunjukkan rentang data, halaman aktif, serta tombol sebelumnya dan berikutnya.
 
-Pagination diterapkan pada data mahasiswa, pengguna, mata kuliah, penawaran kelas, peserta kelas, mata kuliah dosen, daftar nilai dosen, antrean revisi, daftar mata kuliah mahasiswa, dashboard akademik mahasiswa, dan daftar feedback administrator. Pencarian, filter peran/program studi/semester, atau perpindahan kelas akan mengembalikan daftar ke halaman pertama. Dokumen KHS cetak tidak dipaginasi agar seluruh nilai mahasiswa tetap tercetak.
+Pagination diterapkan pada data mahasiswa, pengguna, mata kuliah, penawaran kelas, peserta kelas, mata kuliah dosen, daftar nilai dosen, antrean revisi, daftar mata kuliah mahasiswa, dashboard akademik mahasiswa, dan daftar feedback administrator. Pencarian, filter peran/program studi/semester, atau perpindahan kelas akan mengembalikan daftar ke halaman pertama. Laporan cetak per mata kuliah tidak dipaginasi agar seluruh baris peserta kelas tetap tercetak.
 
 ## Alur akademik dan penilaian
 
@@ -41,7 +41,7 @@ Pagination diterapkan pada data mahasiswa, pengguna, mata kuliah, penawaran kela
 2. Dosen membuka kelas yang diampu, mengatur bobot Tugas, UTS, dan UAS hingga totalnya 100%, lalu mengisi nilai mahasiswa dalam rentang 0–100.
 3. Nilai yang komponennya lengkap dapat diverifikasi dosen. Bobot tetap dapat diperbarui dosen pengampu atau administrator selama totalnya tepat 100%; nilai akhir ditampilkan mengikuti bobot terbaru.
 4. Jika nilai terverifikasi perlu diperbaiki, dosen mengajukan permintaan revisi beserta alasan. Administrator menyetujui atau menolak; dosen kemudian melakukan perubahan dan verifikasi kembali sesuai statusnya.
-5. Mahasiswa melihat nilai pada dashboard dan **Daftar Nilai Saya**. Nilai lengkap yang belum diverifikasi ditampilkan sebagai nilai sementara. Daftar nilai dapat dicetak meskipun ada nilai yang belum lengkap atau belum diverifikasi.
+5. Mahasiswa melihat nilai pada dashboard dan **Daftar Nilai Saya**. Nilai lengkap yang belum diverifikasi ditampilkan sebagai nilai sementara. Pada setiap kartu mata kuliah tersedia tombol **Cetak Nilai Mata Kuliah**, termasuk ketika nilai belum lengkap atau belum diverifikasi.
 
 Nilai akhir dihitung dari kontribusi masing-masing komponen sesuai bobot. Saat bobot diubah, nilai akhir yang ditampilkan akan dihitung ulang dari nilai Tugas, UTS, dan UAS yang tersimpan. Pada rata-rata mahasiswa, setiap mata kuliah yang diikuti menjadi pembagi; mata kuliah yang nilai akhirnya belum dapat dihitung ditampilkan dengan `-` dan dihitung sebagai **0**. Tidak ada rata-rata jika mahasiswa belum mengikuti mata kuliah.
 
@@ -67,7 +67,7 @@ Mata kuliah berkode `RPL701` menggunakan nama **Sistem Komputer**. Kode mata kul
 
 Dosen dapat memilih tombol **Cetak Nilai MK** pada setiap kartu di halaman **Mata Kuliah Saya** untuk langsung mencetak laporan kelas tersebut. Pada akun mahasiswa, setiap kartu di **Daftar Nilai Saya** memiliki tombol **Cetak Nilai Mata Kuliah** untuk mencetak rincian nilai pribadi pada mata kuliah yang dipilih. Tombol **Cetak Laporan** juga tersedia setelah dosen membuka halaman **Pengolahan Nilai & Bobot**. Dokumen dicetak per mata kuliah dengan judul `Laporan Nilai Mata Kuliah [Nama Mata Kuliah]`, tanpa tanda garis pemisah pada judul.
 
-Laporan menggunakan tampilan cetak modern bernuansa biru profesional dan memuat kode mata kuliah, SKS, kelas, periode akademik, serta dosen pengampu. Tabel mencantumkan seluruh peserta kelas dengan kolom nomor, NPM, nama mahasiswa, Tugas, UTS, UAS, **Nilai Akhir**, dan **Nilai Huruf**.
+Laporan menggunakan tampilan cetak modern bernuansa biru profesional dan memuat kode mata kuliah, SKS, kelas, periode akademik, serta dosen pengampu. Laporan dosen mencantumkan seluruh peserta kelas dengan kolom nomor, NPM, nama mahasiswa, Tugas, UTS, UAS, **Nilai Akhir**, dan **Nilai Huruf**. Laporan dari akun mahasiswa memakai format yang sama, tetapi hanya memuat satu baris nilai milik mahasiswa yang sedang login.
 
 Komponen yang belum diinput dosen ditampilkan sebagai `—`. Nilai huruf `E` hanya muncul bila hasil perhitungan dari nilai yang diinput dosen memang berada dalam rentang E; data yang belum diisi tidak otomatis dianggap E. Di bawah tabel terdapat ringkasan bobot Tugas, UTS, UAS, dan total bobot berdasarkan pengaturan dosen/admin terbaru. Laporan ditandatangani dosen pengampu dan Ketua Program Studi **Dr. Eng. Ir. Hazriani, S.Kom., M.T.**
 
