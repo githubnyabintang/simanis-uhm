@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1220" viewBox="0 0 1600 1220" role="img" aria-labelledby="title desc">
+  <title id="title">Rancangan Collection Firestore SIMANIS UHM</title>
+  <desc id="desc">Diagram referensi antarkoleksi Cloud Firestore untuk SIMANIS UHM.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#64748b"/></marker>
+    <style>
+      .bg{fill:#f8fbff}.title{font:700 30px Arial,sans-serif;fill:#0f172a}.subtitle{font:400 15px Arial,sans-serif;fill:#475569}.box{fill:#fff;stroke:#bfdbfe;stroke-width:2}.master{fill:#eff6ff;stroke:#60a5fa}.core{fill:#ecfeff;stroke:#22d3ee}.transaction{fill:#f0fdf4;stroke:#4ade80}.audit{fill:#fff7ed;stroke:#fb923c}.feedback{fill:#fdf4ff;stroke:#e879f9}.head{font:700 17px Arial,sans-serif;fill:#0f172a}.field{font:13px Arial,sans-serif;fill:#475569}.line{stroke:#64748b;stroke-width:2;fill:none;marker-end:url(#arrow)}.label{font:12px Arial,sans-serif;fill:#475569}.legend{font:600 13px Arial,sans-serif;fill:#334155}
+    </style>
+  </defs>
+  <rect class="bg" width="1600" height="1220"/>
+  <text class="title" x="70" y="62">Rancangan Basis Data NoSQL — SIMANIS UHM</text>
+  <text class="subtitle" x="70" y="90">Cloud Firestore: panah menunjukkan referensi ID logis, bukan foreign key database.</text>
+
+  <g transform="translate(70 140)"><rect class="box master" width="220" height="130" rx="16"/><text class="head" x="20" y="32">users</text><text class="field" x="20" y="60">id • name • email</text><text class="field" x="20" y="82">role • isActive</text><text class="field" x="20" y="104">nidn / npm opsional</text></g>
+  <g transform="translate(370 140)"><rect class="box master" width="220" height="130" rx="16"/><text class="head" x="20" y="32">programStudi</text><text class="field" x="20" y="60">id • kodeProdi</text><text class="field" x="20" y="82">namaProdi • jenjang</text></g>
+  <g transform="translate(670 140)"><rect class="box master" width="220" height="130" rx="16"/><text class="head" x="20" y="32">semesters</text><text class="field" x="20" y="60">id • nomorSemester</text><text class="field" x="20" y="82">namaSemester</text></g>
+  <g transform="translate(970 140)"><rect class="box master" width="220" height="130" rx="16"/><text class="head" x="20" y="32">classes</text><text class="field" x="20" y="60">id • kodeKelas</text><text class="field" x="20" y="82">namaKelas • prodiId</text></g>
+  <g transform="translate(1270 140)"><rect class="box master" width="220" height="130" rx="16"/><text class="head" x="20" y="32">courses</text><text class="field" x="20" y="60">id • kodeMK</text><text class="field" x="20" y="82">namaMK • sks</text><text class="field" x="20" y="104">semesterPaket</text></g>
+
+  <g transform="translate(160 395)"><rect class="box core" width="260" height="160" rx="16"/><text class="head" x="20" y="34">students</text><text class="field" x="20" y="64">id • userId • npm</text><text class="field" x="20" y="87">nama • email • angkatan</text><text class="field" x="20" y="110">prodiId • semesterId</text><text class="field" x="20" y="133">kelasAsalId</text></g>
+  <g transform="translate(650 385)"><rect class="box core" width="300" height="185" rx="16"/><text class="head" x="20" y="34">offerings</text><text class="field" x="20" y="64">id • mataKuliahId • dosenId</text><text class="field" x="20" y="87">prodiId • semesterId • kelasId</text><text class="field" x="20" y="110">periodeAkademik • ruang</text><text class="field" x="20" y="133">jadwal • statusPublikasi</text><text class="field" x="20" y="156">satu kelas mata kuliah dibuka</text></g>
+  <g transform="translate(1170 405)"><rect class="box feedback" width="250" height="145" rx="16"/><text class="head" x="20" y="34">feedback</text><text class="field" x="20" y="64">id • userId opsional</text><text class="field" x="20" y="87">nama • email • role</text><text class="field" x="20" y="110">rating • saran • createdAt</text></g>
+
+  <g transform="translate(160 710)"><rect class="box transaction" width="250" height="140" rx="16"/><text class="head" x="20" y="34">enrollments</text><text class="field" x="20" y="64">id • penawaranId</text><text class="field" x="20" y="87">npm • createdAt</text><text class="field" x="20" y="110">mahasiswa pada kelas</text></g>
+  <g transform="translate(525 710)"><rect class="box transaction" width="250" height="140" rx="16"/><text class="head" x="20" y="34">weights</text><text class="field" x="20" y="64">id • penawaranId</text><text class="field" x="20" y="87">bobotTugas • bobotUTS</text><text class="field" x="20" y="110">bobotUAS • updatedAt</text></g>
+  <g transform="translate(890 690)"><rect class="box transaction" width="280" height="180" rx="16"/><text class="head" x="20" y="34">grades</text><text class="field" x="20" y="64">id • pesertaId • penawaranId</text><text class="field" x="20" y="87">npm • nilaiTugas • nilaiUTS</text><text class="field" x="20" y="110">nilaiUAS • statusVerifikasi</text><text class="field" x="20" y="133">statusPermintaanRevisi</text><text class="field" x="20" y="156">nilai akhir dihitung aplikasi</text></g>
+  <g transform="translate(1250 705)"><rect class="box audit" width="260" height="150" rx="16"/><text class="head" x="20" y="34">verificationHistory</text><text class="field" x="20" y="64">id • nilaiId • penawaranId</text><text class="field" x="20" y="87">npm • aksi • userId</text><text class="field" x="20" y="110">waktu • keterangan</text><text class="field" x="20" y="133">audit verifikasi / revisi</text></g>
+
+  <path class="line" d="M180 270 L270 395"/><text class="label" x="184" y="335">userId</text>
+  <path class="line" d="M290 205 L370 205"/><text class="label" x="307" y="193">prodiId</text>
+  <path class="line" d="M590 205 L670 205"/><text class="label" x="610" y="193">semesterId</text>
+  <path class="line" d="M890 205 L970 205"/><text class="label" x="910" y="193">prodiId</text>
+  <path class="line" d="M1190 205 L1270 205"/><text class="label" x="1210" y="193">mataKuliahId</text>
+  <path class="line" d="M290 475 L650 475"/><text class="label" x="450" y="462">prodi, semester, kelas</text>
+  <path class="line" d="M180 270 L1170 445"/><text class="label" x="800" y="340">userId opsional</text>
+  <path class="line" d="M290 555 L285 710"/><text class="label" x="298" y="640">npm</text>
+  <path class="line" d="M800 570 L285 710"/><text class="label" x="500" y="650">penawaranId</text>
+  <path class="line" d="M800 570 L650 710"/><text class="label" x="705" y="648">penawaranId</text>
+  <path class="line" d="M410 780 L890 780"/><text class="label" x="620" y="767">pesertaId</text>
+  <path class="line" d="M800 570 L1030 690"/><text class="label" x="888" y="630">penawaranId</text>
+  <path class="line" d="M1170 780 L1250 780"/><text class="label" x="1183" y="767">nilaiId</text>
+
+  <g transform="translate(70 1015)"><rect width="1460" height="135" rx="18" fill="#ffffff" stroke="#dbeafe"/><text class="head" x="25" y="34">Legenda rancangan NoSQL</text><rect x="25" y="58" width="18" height="18" rx="4" fill="#eff6ff" stroke="#60a5fa"/><text class="legend" x="52" y="72">Master</text><rect x="175" y="58" width="18" height="18" rx="4" fill="#ecfeff" stroke="#22d3ee"/><text class="legend" x="202" y="72">Data inti</text><rect x="340" y="58" width="18" height="18" rx="4" fill="#f0fdf4" stroke="#4ade80"/><text class="legend" x="367" y="72">Transaksi akademik</text><rect x="575" y="58" width="18" height="18" rx="4" fill="#fff7ed" stroke="#fb923c"/><text class="legend" x="602" y="72">Audit</text><rect x="710" y="58" width="18" height="18" rx="4" fill="#fdf4ff" stroke="#e879f9"/><text class="legend" x="737" y="72">Feedback</text><text class="subtitle" x="25" y="111">Firestore tidak menerapkan foreign key atau join. Aplikasi menggunakan field ID sebagai referensi dan menghitung nilai akhir dari grades + weights.</text></g>
+</svg>

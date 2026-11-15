@@ -5,7 +5,6 @@ import { CampusLogo } from '../layout/CampusLogo';
 import {
   Award,
   GraduationCap,
-  Printer,
   CheckCircle2,
   Clock,
   Lock,
@@ -89,10 +88,6 @@ export const MahasiswaNilaiSaya: React.FC = () => {
   const periods = [...new Set(myCoursesWithGrades.map((item) => item.offering?.periodeAkademik).filter((value): value is string => Boolean(value)))];
   const printDate = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
 
-  const handlePrintKHS = () => {
-    window.print();
-  };
-
   return (
     <div className="space-y-6 pb-12 animate-in fade-in">
       
@@ -126,14 +121,6 @@ export const MahasiswaNilaiSaya: React.FC = () => {
             <div className="text-[10px] text-slate-400 mt-0.5">Dari {myCoursesWithGrades.length} mata kuliah</div>
           </div>
 
-          <button
-            onClick={handlePrintKHS}
-            className="p-4 rounded-2xl bg-gradient-to-r from-[#367FA9] to-[#3C8DBC] text-white text-xs font-bold shadow-md shadow-blue-500/25 flex flex-col items-center justify-center transition-all active:scale-95 disabled:cursor-not-allowed disabled:opacity-45 disabled:shadow-none enabled:hover:from-[#2e6d92] enabled:hover:to-[#347ba4] enabled:cursor-pointer"
-            title="Cetak Daftar Nilai"
-          >
-            <Printer className="w-5 h-5 mb-1" />
-            <span className="whitespace-nowrap">Cetak Daftar Nilai</span>
-          </button>
         </div>
       </div>
 
@@ -151,14 +138,6 @@ export const MahasiswaNilaiSaya: React.FC = () => {
           <h3 className="font-extrabold text-sm text-slate-800">
             Mata Kuliah Semester Ini ({myCoursesWithGrades.length} Mata Kuliah)
           </h3>
-          <button
-            onClick={handlePrintKHS}
-            title="Cetak Daftar Nilai"
-            className="no-print inline-flex items-center space-x-1.5 px-3.5 py-2 rounded-xl bg-blue-50/90 text-[#045A8C] text-xs font-bold transition-colors border border-blue-200/60 shadow-2xs disabled:cursor-not-allowed disabled:opacity-45 enabled:hover:bg-blue-100 enabled:cursor-pointer"
-          >
-            <Printer className="w-4 h-4" />
-            <span>Cetak Daftar Nilai (KHS)</span>
-          </button>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -256,7 +235,7 @@ export const MahasiswaNilaiSaya: React.FC = () => {
       </div>
 
       {/* Laporan cetak */}
-      <div className="print-only khs-report">
+      <div className="hidden" aria-hidden="true">
         <header className="khs-letterhead">
           <CampusLogo className="khs-logo" />
           <div className="khs-letterhead-text">

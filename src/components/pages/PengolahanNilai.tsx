@@ -16,6 +16,7 @@ import {
   Save,
   CheckCircle2,
   FileText,
+  Printer,
   UserCheck,
   History,
   ChevronDown,
@@ -24,6 +25,7 @@ import {
 } from 'lucide-react';
 import { GradeRevisionQueue } from './GradeRevisionQueue';
 import { AdminWeightManagement } from './AdminWeightManagement';
+import { CourseGradeReport } from './CourseGradeReport';
 import { PaginationControls, paginate } from '../common/PaginationControls';
 
 export const PengolahanNilai: React.FC = () => {
@@ -121,6 +123,8 @@ export const PengolahanNilai: React.FC = () => {
       });
     }
   };
+
+  const handlePrintCourseReport = () => window.print();
 
   // Inline grade input change handler
   const handleScoreChange = (
@@ -228,6 +232,9 @@ export const PengolahanNilai: React.FC = () => {
               );
             })}
           </select>
+          <button type="button" onClick={handlePrintCourseReport} className="no-print inline-flex items-center gap-1.5 rounded-xl bg-[#045A8C] px-3.5 py-2 text-xs font-bold text-white shadow-sm transition-colors hover:bg-[#034a73]">
+            <Printer className="h-4 w-4" /> Cetak Laporan
+          </button>
         </div>
       </div>
 
@@ -965,6 +972,17 @@ export const PengolahanNilai: React.FC = () => {
           </table>
         </div>
       </div>
+
+      <CourseGradeReport
+        offering={activeOffering}
+        course={activeCourse}
+        classInfo={activeClass}
+        lecturer={currentUser}
+        enrollments={classEnrollments}
+        students={students}
+        grades={classGrades}
+        weight={weights.find((weight) => weight.penawaranId === activeOfferingId)}
+      />
 
       {/* Modal Pengajuan Revisi */}
       {cancelModalState && cancelModalState.open && (

@@ -87,6 +87,33 @@
 .khs-signature-space { height: 23mm; }
 .khs-signature-line { font-weight: 700; }
 
+/* Laporan nilai mata kuliah: dirancang khusus untuk keluaran cetak A4. */
+.course-grade-report { color: #10233e; background: #fff; font: 9pt/1.45 'Plus Jakarta Sans', Arial, sans-serif; }
+.course-report-header { display: grid; grid-template-columns: 19mm 1fr auto; align-items: center; gap: 5mm; padding: 5mm 6mm; color: #fff; background: linear-gradient(115deg, #062d54, #075985 62%, #0e7490); border-radius: 5mm; }
+.course-report-logo { width: 17mm; height: 17mm; padding: 1.5mm; box-sizing: border-box; object-fit: contain; border-radius: 4mm; background: #fff; }
+.course-report-eyebrow { margin: 0 0 1mm; color: #bae6fd; font-size: 7.5pt; font-weight: 700; letter-spacing: .12em; }
+.course-report-header h1 { margin: 0; color: #fff; font-size: 18pt; line-height: 1.15; letter-spacing: -.025em; }
+.course-report-subtitle { margin: 1.2mm 0 0; color: #dbeafe; font-size: 8.5pt; }
+.course-report-code { display: flex; flex-direction: column; align-items: flex-end; gap: 1mm; font-size: 8pt; color: #dbeafe; }
+.course-report-code strong { padding: 1.5mm 2.5mm; color: #082f49; font-size: 11pt; background: #ecfeff; border-radius: 99px; }
+.course-report-meta { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2mm; margin: 5mm 0; }
+.course-report-meta > div { min-width: 0; padding: 2.8mm 3mm; background: #f0f9ff; border: 1px solid #dbeafe; border-radius: 3mm; }
+.course-report-meta span, .course-report-weights span { display: block; margin-bottom: .8mm; color: #64748b; font-size: 7pt; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+.course-report-meta strong { display: block; overflow-wrap: anywhere; color: #0f172a; font-size: 8.5pt; }
+.course-report-table { width: 100%; border-collapse: separate; border-spacing: 0; overflow: hidden; border: 1px solid #dbeafe; border-radius: 3mm; font-size: 8pt; }
+.course-report-table th { padding: 2.5mm 1.5mm; color: #e0f2fe; font-size: 7pt; font-weight: 700; letter-spacing: .04em; text-align: center; text-transform: uppercase; background: #0f4c75; }
+.course-report-table td { padding: 2.4mm 1.5mm; color: #334155; text-align: center; border-top: 1px solid #e2e8f0; }
+.course-report-table tbody tr:nth-child(even) td { background: #f8fafc; }
+.course-report-table td:nth-child(3) { text-align: left; font-weight: 600; color: #0f172a; }
+.course-report-table th:nth-child(1) { width: 5%; }.course-report-table th:nth-child(2) { width: 14%; }.course-report-table th:nth-child(3) { width: 28%; }.course-report-table th:nth-child(n+4) { width: 10.6%; }
+.course-report-score { font-weight: 800; color: #075985 !important; }.course-report-letter { font-weight: 900; color: #0f766e !important; }
+.course-report-empty { padding: 8mm !important; color: #64748b !important; text-align: center !important; }
+.course-report-weights { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2mm; margin-top: 4mm; padding: 3mm; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 3mm; }
+.course-report-weights > div { padding: 2mm 3mm; border-right: 1px solid #e2e8f0; }.course-report-weights > div:last-child { border-right: 0; }
+.course-report-weights strong { color: #0f172a; font-size: 11pt; }.course-report-weight-total { background: #ecfeff; border-radius: 2mm; }
+.course-report-note { margin: 2.5mm 0 0; color: #64748b; font-size: 7.5pt; }
+.course-report-signatures { display: grid; grid-template-columns: 1fr 1fr; gap: 25mm; margin-top: 10mm; text-align: center; color: #334155; }.course-report-signatures p, .course-report-signatures span { margin: 0; }.course-report-signatures span { display: block; margin-top: 1mm; }.course-report-signatures strong { display: block; color: #0f172a; }.course-report-sign-space { height: 20mm; }
+
 @page { size: A4 portrait; margin: 12mm; }
 
 @media print {
@@ -98,6 +125,9 @@
   main { max-width: none !important; padding: 0 !important; }
   .khs-table thead { display: table-header-group; }
   .khs-table tr { break-inside: avoid; }
+  .course-report-table thead { display: table-header-group; }
+  .course-report-table tr { break-inside: avoid; }
+  .course-grade-report { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .no-print {
     display: none !important;
   }

@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useApp } from '../../context/AppContext';
-import { BookOpen, Users, Sliders, FileText, ArrowRight, CheckCircle2, Clock } from 'lucide-react';
+import { BookOpen, Users, Sliders, FileText, ArrowRight, CheckCircle2, Clock, Printer } from 'lucide-react';
 import { PaginationControls, paginate } from '../common/PaginationControls';
+import { CourseGradeReport } from './CourseGradeReport';
 
 export const DosenMataKuliah: React.FC = () => {
-  const { offerings, courses, classes, currentUser, enrollments, grades, weights, setActivePage } = useApp();
+  const { offerings, courses, classes, currentUser, students, enrollments, grades, weights, setActivePage } = useApp();
 
   // Filter offerings assigned to the logged-in lecturer (or all if admin)
   const lecturerOfferings = offerings.filter((o) =>
@@ -12,7 +13,19 @@ export const DosenMataKuliah: React.FC = () => {
   );
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+  const [printOfferingId, setPrintOfferingId] = useState<string | null>(null);
   const visibleOfferings = paginate(lecturerOfferings, page, pageSize);
+  const printOffering = offerings.find((offering) => offering.id === printOfferingId);
+  const printCourse = courses.find((course) => course.id === printOffering?.mataKuliahId);
+  const printClass = classes.find((classItem) => classItem.id === printOffering?.kelasId);
+
+  useEffect(() => {
+    if (!printOfferingId) return;
+    const timer = window.setTimeout(() => window.print(), 100);
+    const clearPrintTarget = () => setPrintOfferingId(null);
+    window.addEventListener('afterprint', clearPrintTarget);
+    return () => { window.clearTimeout(timer); window.removeEventListener('afterprint', clearPrintTarget); };
+  }, [printOfferingId]);
 
   return (
     <div className="space-y-6 pb-12 animate-in fade-in">
@@ -83,13 +96,20 @@ export const DosenMataKuliah: React.FC = () => {
                 </div>
               </div>
 
-              <div className="mt-6 pt-4 border-t border-slate-100/80">
+              <div className="mt-6 grid grid-cols-1 gap-2 border-t border-slate-100/80 pt-4 sm:grid-cols-2">
                 <button
                   onClick={() => setActivePage('pengolahan-nilai', off.id)}
-                  className="w-full py-3 px-4 rounded-2xl bg-gradient-to-r from-[#367FA9] to-[#3C8DBC] hover:from-[#2e6d92] hover:to-[#347ba4] text-white text-xs font-bold flex items-center justify-center space-x-2 shadow-md shadow-blue-500/20 transition-all cursor-pointer"
+                  className="py-3 px-3 rounded-2xl bg-gradient-to-r from-[#367FA9] to-[#3C8DBC] hover:from-[#2e6d92] hover:to-[#347ba4] text-white text-xs font-bold flex items-center justify-center space-x-2 shadow-md shadow-blue-500/20 transition-all cursor-pointer"
                 >
                   <Sliders className="w-4 h-4" />
                   <span>Input & Olah Nilai</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setPrintOfferingId(off.id)}
+                  className="no-print rounded-2xl border border-blue-200 bg-blue-50 px-3 py-3 text-xs font-bold text-[#045A8C] transition-colors hover:bg-blue-100"
+                >
+                  <span className="inline-flex items-center justify-center gap-2"><Printer className="h-4 w-4" />Cetak Nilai MK</span>
                 </button>
               </div>
             </div>
@@ -97,6 +117,7 @@ export const DosenMataKuliah: React.FC = () => {
         })}
       </div>
       <PaginationControls page={page} pageSize={pageSize} totalItems={lecturerOfferings.length} onPageChange={setPage} onPageSizeChange={(size) => { setPageSize(size); setPage(1); }} itemLabel="mata kuliah" />
+      {printOffering && <CourseGradeReport offering={printOffering} course={printCourse} classInfo={printClass} lecturer={currentUser || undefined} enrollments={enrollments.filter((enrollment) => enrollment.penawaranId === printOffering.id)} students={students} grades={grades.filter((grade) => grade.penawaranId === printOffering.id)} weight={weights.find((weight) => weight.penawaranId === printOffering.id)} />}
     </div>
   );
 };

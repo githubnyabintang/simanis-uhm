@@ -24,8 +24,8 @@ Project ini dikembangkan untuk **tugas dan demonstrasi**. Data contoh dan cara l
 | Peran | Fitur yang tersedia |
 |---|---|
 | Administrator | Dashboard ringkasan, pengelolaan mahasiswa, mata kuliah, akun dosen, penawaran kelas, peserta, pengaturan bobot seluruh kelas, keputusan revisi nilai, serta melihat semua feedback. |
-| Dosen | Melihat mata kuliah yang diampu, mengatur bobot, memasukkan Tugas/UTS/UAS, memverifikasi nilai, meminta revisi nilai terverifikasi, serta mengirim feedback. |
-| Mahasiswa | Dashboard studi, grafik dan rata-rata nilai, daftar nilai, cetak daftar nilai, profil, serta mengirim feedback. |
+| Dosen | Melihat mata kuliah yang diampu, mengatur bobot, memasukkan Tugas/UTS/UAS, memverifikasi nilai, mencetak laporan nilai per mata kuliah, meminta revisi nilai terverifikasi, serta mengirim feedback. |
+| Mahasiswa | Dashboard studi, grafik dan rata-rata nilai, daftar nilai, profil, serta mengirim feedback. |
 
 Menu yang terlihat mengikuti role akun di aplikasi. Administrator tidak dapat mengubah komponen nilai mahasiswa; administrator hanya mengatur bobot, memberi keputusan revisi, dan melihat feedback. Pengolahan komponen nilai serta verifikasi tetap dilakukan dosen pengampu.
 
@@ -63,13 +63,13 @@ Data yang disiapkan pada Firestore menggunakan nama program studi **Magister Pas
 
 Mata kuliah berkode `RPL701` menggunakan nama **Sistem Komputer**. Kode mata kuliah saat ini tetap `RPL701`.
 
-## Cetak Kartu Hasil Studi
+## Cetak Laporan Nilai Mata Kuliah
 
-Mahasiswa dapat membuka menu **Daftar Nilai Saya**, lalu memilih **Cetak Daftar Nilai**. Dokumen menggunakan kop surat dan logo Universitas Handayani Makassar, identitas mahasiswa, tahun akademik, semester, serta kelas dari data yang tersedia di Firestore.
+Dosen dapat memilih tombol **Cetak Nilai MK** pada setiap kartu di halaman **Mata Kuliah Saya** untuk langsung mencetak laporan kelas tersebut. Tombol **Cetak Laporan** juga tersedia setelah dosen membuka halaman **Pengolahan Nilai & Bobot**. Dokumen dicetak per mata kuliah dengan judul `Laporan Nilai Mata Kuliah [Nama Mata Kuliah]`, tanpa tanda garis pemisah pada judul.
 
-Tabel cetak memuat nomor, kode mata kuliah, nama mata kuliah, nama dosen, dan kolom **Nilai** (huruf mutu). Di bawah tabel terdapat **Ringkasan Rata-rata Nilai** dalam persen serta blok tanda tangan Ketua Program Studi dengan nama **Dr. Eng. Ir. Hazriani, S.Kom., M.T.** Kolom SKS, nilai akhir angka, dan status tidak ditampilkan pada tabel cetak.
+Laporan menggunakan tampilan cetak modern bernuansa biru profesional dan memuat kode mata kuliah, SKS, kelas, periode akademik, serta dosen pengampu. Tabel mencantumkan seluruh peserta kelas dengan kolom nomor, NPM, nama mahasiswa, Tugas, UTS, UAS, **Nilai Akhir**, dan **Nilai Huruf**.
 
-Dokumen tetap dapat dicetak saat nilai belum lengkap atau belum diverifikasi. Nilai lengkap yang belum diverifikasi termasuk dalam perhitungan sebagai nilai sementara; mata kuliah tanpa nilai akhir yang dapat dihitung tetap dihitung sebagai 0 dalam rata-rata.
+Komponen yang belum diinput dosen ditampilkan sebagai `—`. Nilai huruf `E` hanya muncul bila hasil perhitungan dari nilai yang diinput dosen memang berada dalam rentang E; data yang belum diisi tidak otomatis dianggap E. Di bawah tabel terdapat ringkasan bobot Tugas, UTS, UAS, dan total bobot berdasarkan pengaturan dosen/admin terbaru. Laporan ditandatangani dosen pengampu dan Ketua Program Studi **Dr. Eng. Ir. Hazriani, S.Kom., M.T.**
 
 ## Alur data Firestore
 
@@ -96,7 +96,9 @@ Collection utama yang dipakai:
 | `verificationHistory` | Riwayat tindakan verifikasi dan revisi. |
 | `feedback` | Nama, email, sumber pengirim, tiga rating bintang, saran, dan waktu pengiriman feedback. |
 
-Pemetaan field tersedia di [firestore.schema.md](firestore.schema.md). Firestore membuat collection ketika dokumen pertama ditulis; Firestore Rules mengatur akses ke dokumen, bukan membuat collection. Operasi yang melibatkan beberapa collection saat ini belum dibungkus dalam satu transaksi lintas collection.
+Pemetaan field tersedia di [firestore.schema.md](firestore.schema.md), sedangkan rancangan collection, referensi, pola akses, dan perbedaannya dengan ERD tersedia di [DATABASE_DESIGN.md](DATABASE_DESIGN.md). Firestore membuat collection ketika dokumen pertama ditulis; Firestore Rules mengatur akses ke dokumen, bukan membuat collection. Operasi yang melibatkan beberapa collection saat ini belum dibungkus dalam satu transaksi lintas collection.
+
+![Diagram rancangan collection Firestore SIMANIS UHM](public/database-design.svg)
 
 ## Akun contoh
 
