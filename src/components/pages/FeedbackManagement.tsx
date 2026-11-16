@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { MessageSquareHeart, Star } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { PaginationControls, paginate } from '../common/PaginationControls';
+import { DataTransfer } from '../common/DataTransfer';
 
 const roleLabel = { dosen: 'Dosen', mahasiswa: 'Mahasiswa', pengunjung: 'Pengunjung' };
 
@@ -18,6 +19,7 @@ export const FeedbackManagement: React.FC = () => {
 
   return <div className="space-y-6 pb-12 animate-in fade-in">
     <header><div className="flex items-center gap-2"><h2 className="text-xl font-black text-slate-800">Feedback Pengguna</h2><span className="rounded-full bg-blue-100 px-2 py-0.5 text-[10px] font-black text-[#045A8C]">{feedback.length}</span></div><p className="mt-1 text-xs text-slate-500">Tinjau seluruh masukan dari dosen, mahasiswa, dan pengunjung.</p></header>
+    <DataTransfer kind="feedback" contextLabel="Seluruh feedback pengguna" />
     <section className="rounded-[28px] border border-white/90 bg-white/80 p-5 shadow-[0_12px_40px_rgba(4,90,140,0.06)] md:p-7">
       {rows.length === 0 ? <div className="py-12 text-center"><MessageSquareHeart className="mx-auto h-10 w-10 text-slate-300" /><p className="mt-3 text-sm font-bold text-slate-600">Belum ada feedback yang masuk.</p></div> : <>
         <div className="space-y-4">

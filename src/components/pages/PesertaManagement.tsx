@@ -1,7 +1,9 @@
+import { notifySuccess } from '../common/SuccessToast';
 import React, { useEffect, useState } from 'react';
 import { useApp } from '../../context/AppContext';
 import { UserCheck, UserPlus, Trash2, CheckCircle2, AlertCircle, Search } from 'lucide-react';
 import { PaginationControls, paginate } from '../common/PaginationControls';
+import { DataTransfer } from '../common/DataTransfer';
 
 export const PesertaManagement: React.FC = () => {
   const {
@@ -16,7 +18,7 @@ export const PesertaManagement: React.FC = () => {
     setSelectedPenawaranId
   } = useApp();
 
-  const activeOfferingId = selectedPenawaranId || (offerings[0]?.id ?? '');
+  const activeOfferingId = offerings.some(o => o.id === selectedPenawaranId) ? selectedPenawaranId! : (offerings[0]?.id ?? '');
   const activeOffering = offerings.find((o) => o.id === activeOfferingId) || offerings[0];
   const activeCourse = courses.find((c) => c.id === activeOffering?.mataKuliahId);
   const activeClass = classes.find((c) => c.id === activeOffering?.kelasId);
@@ -46,7 +48,7 @@ export const PesertaManagement: React.FC = () => {
 
     const res = enrollStudent(activeOfferingId, selectedNpm);
     if (res.success) {
-      setActionNotice(`Mahasiswa dengan NPM ${selectedNpm} berhasil didaftarkan ke kelas.`);
+      setActionNotice(`Mahasiswa dengan NPM ${selectedNpm} berhasil didaftarkan ke kelas.`); notifySuccess(`Mahasiswa dengan NPM ${selectedNpm} berhasil didaftarkan ke kelas.`);
       setTimeout(() => setActionNotice(null), 3000);
       // update select
       const remaining = availableStudents.filter((s) => s.npm !== selectedNpm);
@@ -60,7 +62,7 @@ export const PesertaManagement: React.FC = () => {
     if (confirm(`Keluarkan ${name} dari kelas ini?`)) {
       const res = unenrollStudent(enrollmentId);
       if (res.success) {
-        setActionNotice('Pendaftaran peserta berhasil dibatalkan.');
+        setActionNotice('Pendaftaran peserta berhasil dibatalkan.'); notifySuccess('Pendaftaran peserta berhasil dibatalkan.');
         setTimeout(() => setActionNotice(null), 3000);
       } else {
         alert(res.error || 'Gagal membatalkan pendaftaran.');
@@ -105,6 +107,8 @@ export const PesertaManagement: React.FC = () => {
           </select>
         </div>
       </div>
+
+      <DataTransfer key={activeOfferingId} kind="enrollments" scope={{ offeringId: activeOfferingId }} contextLabel={`${activeCourse?.kodeMK || 'Pilih mata kuliah'} · ${activeClass?.kodeKelas || 'Pilih kelas'} · ${activeOffering?.periodeAkademik || ''}`} />
 
       {actionNotice && (
         <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold flex items-center space-x-2">

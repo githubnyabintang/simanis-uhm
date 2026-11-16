@@ -1,8 +1,10 @@
+import { notifySuccess } from '../common/SuccessToast';
 import React, { useEffect, useState } from 'react';
 import { useApp } from '../../context/AppContext';
 import { User } from '../../types';
 import { Users, CheckCircle2, Search, Pencil, X } from 'lucide-react';
 import { PaginationControls, paginate } from '../common/PaginationControls';
+import { DataTransfer } from '../common/DataTransfer';
 
 export const UserManagement: React.FC = () => {
   const { users, updateDosenAccount } = useApp();
@@ -38,6 +40,7 @@ export const UserManagement: React.FC = () => {
     if (!editingDosen) return;
     const result = updateDosenAccount(editingDosen.id, editName, editEmail);
     setToastError(!result.success);
+    if (result.success) notifySuccess('Nama dan email dosen berhasil diperbarui.');
     setToastMessage(result.success ? 'Nama dan email dosen berhasil diperbarui.' : result.error || 'Perubahan gagal disimpan.');
     if (result.success) setEditingDosen(null);
     setTimeout(() => setToastMessage(null), 4000);
@@ -60,6 +63,8 @@ export const UserManagement: React.FC = () => {
           </p>
         </div>
       </div>
+
+      <DataTransfer kind="users" scope={{ search, role: roleFilter }} contextLabel="Ekspor sesuai filter pengguna · Impor khusus dosen" />
 
       {toastMessage && (
         <div className={`p-3.5 rounded-xl border text-xs font-semibold flex items-center space-x-2 ${toastError ? 'bg-red-50 border-red-200 text-red-800' : 'bg-emerald-50 border-emerald-200 text-emerald-800'}`}>

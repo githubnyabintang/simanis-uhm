@@ -1,8 +1,10 @@
+import { notifySuccess } from '../common/SuccessToast';
 import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
 import { PenawaranMataKuliah } from '../../types';
 import { Calendar, Plus, Trash2, CheckCircle2, AlertCircle, ArrowRight } from 'lucide-react';
 import { PaginationControls, paginate } from '../common/PaginationControls';
+import { DataTransfer } from '../common/DataTransfer';
 
 export const PenawaranManagement: React.FC = () => {
   const {
@@ -47,7 +49,7 @@ export const PenawaranManagement: React.FC = () => {
       statusPublikasi: 'draft'
     });
     if (res.success) {
-      setActionNotice('Penawaran kelas baru berhasil dibuat.');
+      setActionNotice('Penawaran kelas baru berhasil dibuat.'); notifySuccess('Penawaran kelas baru berhasil dibuat.');
       setModalOpen(false);
       setTimeout(() => setActionNotice(null), 3000);
     }
@@ -57,7 +59,7 @@ export const PenawaranManagement: React.FC = () => {
     if (confirm(`Hapus kelas penawaran "${label}"?`)) {
       const res = deleteOffering(id);
       if (res.success) {
-        setActionNotice('Kelas penawaran berhasil dihapus.');
+        setActionNotice('Kelas penawaran berhasil dihapus.'); notifySuccess('Kelas penawaran berhasil dihapus.');
         setTimeout(() => setActionNotice(null), 3000);
       } else {
         alert(res.error);
@@ -90,6 +92,8 @@ export const PenawaranManagement: React.FC = () => {
           <span>Buka Penawaran Kelas</span>
         </button>
       </div>
+
+      <DataTransfer kind="offerings" contextLabel="Seluruh penawaran mata kuliah dan kelas" />
 
       {actionNotice && (
         <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold flex items-center space-x-2">

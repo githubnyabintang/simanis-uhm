@@ -1,0 +1,14 @@
+﻿.success-dialog { margin:auto; padding:0; width:min(400px,calc(100vw - 32px)); max-width:none; border:0; border-radius:28px; background:white; box-shadow:0 25px 80px #0f344b45; overflow:hidden; }
+.success-dialog::backdrop { background:#102b4166; backdrop-filter:blur(5px); }
+.success-card { position:relative; display:flex; align-items:center; flex-direction:column; padding:38px 28px 30px; text-align:center; animation:success-enter .25s ease-out; }
+.success-toast-icon { display:grid; place-items:center; width:70px; height:70px; border-radius:24px; color:#047857; background:#d1fae5; box-shadow:0 8px 24px #10b98122; }
+.success-card h2 { margin:18px 0 6px; color:#0f172a; font-size:22px; font-weight:800; }
+.success-card p { color:#64748b; font-size:13px; line-height:1.6; overflow-wrap:anywhere; }
+.success-close { position:absolute; top:14px; right:14px; display:grid; place-items:center; width:40px; height:40px; border-radius:12px; color:#64748b; cursor:pointer; }
+.success-close:hover { background:#f1f5f9; }
+.success-done { width:100%; min-height:44px; margin-top:24px; border-radius:14px; background:linear-gradient(120deg,#045a8c,#3c8dbc); color:white; font-size:13px; font-weight:700; cursor:pointer; }
+.success-card button:focus-visible { outline:3px solid #60a5fa; outline-offset:3px; }
+.success-toast-progress { position:absolute; bottom:0; left:0; height:3px; width:100%; background:#34d399; transform-origin:left; animation:success-time 3s linear forwards; }
+@keyframes success-enter { from { opacity:0; transform:translateY(10px) scale(.97); } to { opacity:1; transform:translateY(0) scale(1); } }
+@keyframes success-time { to { transform:scaleX(0); } }
+@media (prefers-reduced-motion:reduce) { .success-card,.success-toast-progress { animation:none; } }

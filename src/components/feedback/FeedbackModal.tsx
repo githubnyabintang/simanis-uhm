@@ -1,3 +1,4 @@
+import { notifySuccess } from '../common/SuccessToast';
 import React, { useEffect, useState } from 'react';
 import { MessageSquareHeart, Star, X } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
@@ -63,8 +64,8 @@ export const FeedbackModal: React.FC = () => {
       setMessage(result.error || 'Feedback belum dapat dikirim.');
       return;
     }
-    setMessage('Terima kasih. Feedback Anda berhasil dikirim.');
-    window.setTimeout(closeFeedbackModal, 1300);
+    closeFeedbackModal();
+    notifySuccess('Terima kasih. Feedback Anda berhasil dikirim.');
   };
 
   return (

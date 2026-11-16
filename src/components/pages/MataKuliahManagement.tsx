@@ -1,8 +1,10 @@
+import { notifySuccess } from '../common/SuccessToast';
 import React, { useEffect, useState } from 'react';
 import { useApp } from '../../context/AppContext';
 import { MataKuliah } from '../../types';
 import { BookOpen, Plus, Search, Edit2, Trash2, CheckCircle2, AlertCircle } from 'lucide-react';
 import { PaginationControls, paginate } from '../common/PaginationControls';
+import { DataTransfer } from '../common/DataTransfer';
 
 export const MataKuliahManagement: React.FC = () => {
   const { courses, addCourse, updateCourse, deleteCourse, offerings } = useApp();
@@ -69,7 +71,7 @@ export const MataKuliahManagement: React.FC = () => {
         deskripsi
       });
       if (res.success) {
-        setActionNotice('Data mata kuliah berhasil diperbarui.');
+        setActionNotice('Data mata kuliah berhasil diperbarui.'); notifySuccess('Data mata kuliah berhasil diperbarui.');
         setModalOpen(false);
         setTimeout(() => setActionNotice(null), 3000);
       } else {
@@ -84,7 +86,7 @@ export const MataKuliahManagement: React.FC = () => {
         deskripsi
       });
       if (res.success) {
-        setActionNotice('Mata kuliah baru berhasil ditambahkan.');
+        setActionNotice('Mata kuliah baru berhasil ditambahkan.'); notifySuccess('Mata kuliah baru berhasil ditambahkan.');
         setModalOpen(false);
         setTimeout(() => setActionNotice(null), 3000);
       } else {
@@ -97,7 +99,7 @@ export const MataKuliahManagement: React.FC = () => {
     if (confirm(`Yakin ingin menghapus mata kuliah "${name}"?`)) {
       const res = deleteCourse(id);
       if (res.success) {
-        setActionNotice('Mata kuliah berhasil dihapus.');
+        setActionNotice('Mata kuliah berhasil dihapus.'); notifySuccess('Mata kuliah berhasil dihapus.');
         setTimeout(() => setActionNotice(null), 3000);
       } else {
         alert(res.error || 'Gagal menghapus mata kuliah.');
@@ -130,6 +132,8 @@ export const MataKuliahManagement: React.FC = () => {
           <span>Tambah Mata Kuliah</span>
         </button>
       </div>
+
+      <DataTransfer kind="courses" scope={{ search }} contextLabel="Mata kuliah sesuai pencarian" />
 
       {actionNotice && (
         <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold flex items-center space-x-2">

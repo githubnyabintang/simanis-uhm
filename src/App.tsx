@@ -23,6 +23,7 @@ import { MahasiswaDashboard } from './components/pages/MahasiswaDashboard';
 import { UserProfilePage } from './components/pages/UserProfilePage';
 import { FeedbackManagement } from './components/pages/FeedbackManagement';
 import { FeedbackModal } from './components/feedback/FeedbackModal';
+import { SuccessToast } from './components/common/SuccessToast';
 import { Menu } from 'lucide-react';
 
 import { MobileBottomBar } from './components/layout/MobileBottomBar';
@@ -138,6 +139,7 @@ export default function App() {
     <AppProvider>
       <MainLayout />
       <FeedbackModal />
+      <SuccessToast />
     </AppProvider>
   );
 }

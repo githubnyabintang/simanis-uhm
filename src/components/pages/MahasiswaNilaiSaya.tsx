@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { PaginationControls, paginate } from '../common/PaginationControls';
 import { CourseGradeReport } from './CourseGradeReport';
+import { DataTransfer } from '../common/DataTransfer';
 
 export const MahasiswaNilaiSaya: React.FC = () => {
   const [page, setPage] = useState(1);
@@ -135,6 +136,8 @@ export const MahasiswaNilaiSaya: React.FC = () => {
 
         </div>
       </div>
+
+      <DataTransfer kind="my-grades" contextLabel={`Nilai pribadi · ${student.npm}`} />
 
       {/* Notice about Grade Privacy & Verification Rule */}
       <div className="no-print p-4 rounded-2xl bg-white/70 backdrop-blur-xl border border-white/90 text-slate-700 text-xs flex items-start space-x-3 shadow-2xs">

@@ -1,3 +1,4 @@
+import { notifySuccess } from '../common/SuccessToast';
 import React, { useEffect, useState } from 'react';
 import { CheckCircle2, Save, Sliders } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
@@ -18,6 +19,7 @@ export const AdminWeightManagement: React.FC = () => {
   const save = (event: React.FormEvent) => {
     event.preventDefault();
     const result = saveWeights(offeringId, tugas, uts, uas);
+    if (result.success) notifySuccess('Bobot penilaian berhasil diperbarui.');
     setNotice(result.success ? 'Bobot berhasil diperbarui. Nilai akhir akan mengikuti konfigurasi terbaru.' : result.error || 'Bobot gagal diperbarui.');
   };
 

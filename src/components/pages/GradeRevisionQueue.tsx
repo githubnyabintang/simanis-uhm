@@ -1,3 +1,4 @@
+import { notifySuccess } from '../common/SuccessToast';
 import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
 import { CheckCircle2, Clock3 } from 'lucide-react';
@@ -18,6 +19,7 @@ export const GradeRevisionQueue: React.FC = () => {
       setNotice(result.error || 'Keputusan gagal disimpan.');
       return;
     }
+    notifySuccess(approve ? 'Izin revisi diberikan.' : 'Permintaan revisi ditolak.');
     setDecisionNotes((previous) => ({ ...previous, [gradeId]: '' }));
     setNotice(approve ? 'Izin revisi diberikan kepada dosen pengampu.' : 'Permintaan revisi ditolak. Nilai tetap terkunci.');
     window.setTimeout(() => setNotice(null), 4000);

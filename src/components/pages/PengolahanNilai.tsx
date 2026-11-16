@@ -1,3 +1,4 @@
+import { notifySuccess } from '../common/SuccessToast';
 import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
 import {
@@ -27,6 +28,7 @@ import { GradeRevisionQueue } from './GradeRevisionQueue';
 import { AdminWeightManagement } from './AdminWeightManagement';
 import { CourseGradeReport } from './CourseGradeReport';
 import { PaginationControls, paginate } from '../common/PaginationControls';
+import { DataTransfer } from '../common/DataTransfer';
 
 export const PengolahanNilai: React.FC = () => {
   const {
@@ -111,6 +113,7 @@ export const PengolahanNilai: React.FC = () => {
 
     const res = saveWeights(activeOfferingId, Number(tugasWeight), Number(utsWeight), Number(uasWeight));
     if (res.success) {
+      notifySuccess('Bobot penilaian berhasil diperbarui.');
       setWeightMessage({
         type: 'success',
         text: 'Pengaturan bobot berhasil diperbarui! Perhitungan nilai otomatis telah disinkronkan.'
@@ -155,6 +158,7 @@ export const PengolahanNilai: React.FC = () => {
   const handleVerify = (gradeId: string, studentName: string) => {
     const res = verifyGrade(gradeId);
     if (res.success) {
+      notifySuccess('Nilai berhasil diverifikasi.');
       setGradeNotification({
         type: 'success',
         text: `Nilai akhir ${studentName} berhasil diverifikasi dan dikunci. Data kini telah dipublikasikan dan dapat dilihat oleh mahasiswa.`
@@ -173,6 +177,7 @@ export const PengolahanNilai: React.FC = () => {
     if (!cancelModalState) return;
     const res = cancelVerification(cancelModalState.gradeId, cancelReason);
     if (res.success) {
+      notifySuccess('Permintaan revisi berhasil dikirim.');
       setGradeNotification({
         type: 'success',
         text: `Permintaan revisi ${cancelModalState.studentName} telah dikirim ke administrator.`
@@ -237,6 +242,8 @@ export const PengolahanNilai: React.FC = () => {
           </button>
         </div>
       </div>
+
+      <div className="mt-5"><DataTransfer key={activeOfferingId} kind="grades" scope={{ offeringId: activeOfferingId }} contextLabel={`${activeCourse?.kodeMK || 'Pilih mata kuliah'} · ${activeClass?.kodeKelas || 'Pilih kelas'} · ${activeOffering?.periodeAkademik || ''}`} /></div>
 
       {/* Grade Notification Alert */}
       {gradeNotification && (

@@ -1,3 +1,4 @@
+import { notifySuccess } from '../common/SuccessToast';
 import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
 import { User, ShieldCheck, Mail, Calendar, Key, CheckCircle2, AlertCircle } from 'lucide-react';
@@ -13,6 +14,7 @@ export const UserProfilePage: React.FC = () => {
     e.preventDefault();
     const result = updateOwnProfile(name, email);
     setSaveFailed(!result.success);
+    if (result.success) notifySuccess('Profil berhasil diperbarui.');
     setSavedNotice(result.success ? 'Profil berhasil diperbarui.' : result.error || 'Profil gagal diperbarui.');
     setTimeout(() => setSavedNotice(null), 3000);
   };

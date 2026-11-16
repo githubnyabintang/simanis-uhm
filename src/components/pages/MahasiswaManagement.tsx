@@ -1,3 +1,4 @@
+import { notifySuccess } from '../common/SuccessToast';
 import React, { useEffect, useState } from 'react';
 import { useApp } from '../../context/AppContext';
 import { Mahasiswa } from '../../types';
@@ -13,6 +14,7 @@ import {
   UserCheck
 } from 'lucide-react';
 import { PaginationControls, paginate } from '../common/PaginationControls';
+import { DataTransfer } from '../common/DataTransfer';
 
 export const MahasiswaManagement: React.FC = () => {
   const { students, programStudi, semesters, classes, addStudent, updateStudent, deleteStudent } = useApp();
@@ -88,7 +90,7 @@ export const MahasiswaManagement: React.FC = () => {
         email: email || `${npm}@uhm.ac.id`
       });
       if (res.success) {
-        setActionNotice('Data mahasiswa berhasil diperbarui.');
+        setActionNotice('Data mahasiswa berhasil diperbarui.'); notifySuccess('Data mahasiswa berhasil diperbarui.');
         setModalOpen(false);
         setTimeout(() => setActionNotice(null), 3500);
       } else {
@@ -105,7 +107,7 @@ export const MahasiswaManagement: React.FC = () => {
         angkatan: '2026'
       });
       if (res.success) {
-        setActionNotice('Mahasiswa baru berhasil didaftarkan ke sistem.');
+        setActionNotice('Mahasiswa baru berhasil didaftarkan ke sistem.'); notifySuccess('Mahasiswa baru berhasil didaftarkan ke sistem.');
         setModalOpen(false);
         setTimeout(() => setActionNotice(null), 3500);
       } else {
@@ -118,7 +120,7 @@ export const MahasiswaManagement: React.FC = () => {
     if (confirm(`Yakin ingin menghapus data mahasiswa "${name}"?`)) {
       const res = deleteStudent(id);
       if (res.success) {
-        setActionNotice('Data mahasiswa berhasil dihapus.');
+        setActionNotice('Data mahasiswa berhasil dihapus.'); notifySuccess('Data mahasiswa berhasil dihapus.');
         setTimeout(() => setActionNotice(null), 3500);
       } else {
         alert(res.error || 'Gagal menghapus mahasiswa.');
@@ -152,6 +154,8 @@ export const MahasiswaManagement: React.FC = () => {
           <span>Tambah Mahasiswa</span>
         </button>
       </div>
+
+      <DataTransfer kind="students" scope={{ search, prodiId: selectedProdi }} contextLabel="Mahasiswa sesuai pencarian dan filter prodi" />
 
       {/* Action Notice */}
       {actionNotice && (

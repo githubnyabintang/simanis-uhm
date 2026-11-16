@@ -1,5 +1,5 @@
 import { getApp, getApps, initializeApp, type FirebaseOptions } from 'firebase/app';
-import { getFirestore } from 'firebase/firestore';
+import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore';
 
 export interface FirebaseWebConfig {
   apiKey: string;
@@ -41,4 +41,10 @@ export const firebaseApp = firebaseConfigured
   : null;
 
 export const firestore = firebaseApp ? getFirestore(firebaseApp) : null;
+
+// Only used by local integration tests; production builds never connect to an emulator.
+if (firestore && import.meta.env.DEV && import.meta.env.VITE_FIRESTORE_EMULATOR_PORT) {
+  if (!firebaseConfig.projectId.startsWith('demo-')) throw new Error('Emulator harus memakai project ID demo- agar data produksi tidak tersentuh.');
+  connectFirestoreEmulator(firestore, '127.0.0.1', Number(import.meta.env.VITE_FIRESTORE_EMULATOR_PORT));
+}
 
